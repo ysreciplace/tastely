@@ -1,0 +1,44 @@
+<!-- resources/templates/home.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>레시피 홈</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav>
+    <a href="/home">홈</a>
+    <a href="/recipes">레시피</a>
+    <a href="/community">커뮤니티</a>
+    <a href="/mypage">마이페이지</a>
+    <a href="/logout">로그아웃</a>
+</nav>
+
+<div class="container">
+    <h2>🌟 추천 레시피</h2>
+    <div class="recipe-list" th:each="recipe : ${recommendedRecipes}">
+        <div class="card">
+            <img th:src="@{'/images/' + ${recipe.thumbnail}}" />
+            <p th:text="${recipe.title}"></p>
+        </div>
+    </div>
+
+    <h2>🔥 인기 레시피</h2>
+    <div class="recipe-list" th:each="recipe : ${popularRecipes}">
+        <div class="card">
+            <img th:src="@{'/images/' + ${recipe.thumbnail}}" />
+            <p th:text="${recipe.title}"></p>
+        </div>
+    </div>
+
+    <h2>🆕 신규 레시피</h2>
+    <div class="recipe-list" th:each="recipe : ${newRecipes}">
+        <div class="card">
+            <img th:src="@{'/images/' + ${recipe.thumbnail}}" />
+            <p th:text="${recipe.title}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
