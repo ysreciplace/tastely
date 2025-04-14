@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>레시피 등록</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fefaf6;
+            padding: 30px;
+        }
+        table {
+            width: 600px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            width: 150px;
+            background-color: #fff3e0;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff944d;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h2>레시피 등록 </h2>
+<form th:action="@{/recipe/history}" method="post">
+    <table>
+        <tr>
+            <th>제목</th>
+            <td><input type="text" name="title" placeholder="예: 김치찌개" /></td>
+        </tr>
+        <tr>
+            <th>설명</th>
+            <td><textarea name="description" rows="4" placeholder="레시피 설명 입력"></textarea></td>
+        </tr>
+        <tr>
+            <th>썸네일</th>
+            <td><input type="text" name="thumbnail" placeholder="이미지 URL 또는 파일명" /></td>
+        </tr>
+        <tr>
+            <th>인분</th>
+            <td><input type="number" name="servings" min="1" /></td>
+        </tr>
+        <tr>
+            <th>조리 시간</th>
+            <td><input type="number" name="cookTime" min="1" placeholder="분 단위" /></td>
+        </tr>
+        <tr>
+            <th>난이도</th>
+            <td>
+                <select name="difficulty">
+                    <option value="EASY">쉬움</option>
+                    <option value="MEDIUM">보통</option>
+                    <option value="HARD">어려움</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>작성자 ID</th>
+            <td><input type="number" name="userId" min="1" /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit">등록하기</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
