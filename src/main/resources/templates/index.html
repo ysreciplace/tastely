@@ -2,9 +2,206 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Recipe World</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 🔄 슬라이드 배경 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* 🎯 인트로 텍스트 */
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+        }
+
+        .hero-content form input {
+            padding: 12px;
+            width: 300px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        /* 📦 컨텐츠 섹션 */
+        .section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 🧾 추천 레시피 카드 */
+        .recipes-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card {
+            width: 200px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            background: #fff;
+        }
+        .card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .card p {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        /* 🏷 카테고리 버튼 */
+        .tag-list {
+            text-align: center;
+        }
+        .tag-list a {
+            margin: 10px;
+            padding: 10px 20px;
+            background: #ffebcd;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #444;
+            font-weight: bold;
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+
+        /* 📢 CTA */
+        .cta {
+            text-align: center;
+            margin-top: 40px;
+        }
+        .cta a {
+            background: #ff6b6b;
+            color: white;
+            padding: 14px 28px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            .hero-content form input {
+                width: 80%;
+            }
+        }
+    </style>
 </head>
 <body>
-연서님 작업함 ㅇㅇ
+
+<!-- 🔄 배경 슬라이드 -->
+<div class="slider">
+    <div class="slide active" style="background-image: url('/images/korean_cuisine_intro.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/japan_cuisine_intro.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/chinese_cuisine_intro.jpg');"></div>
+    <!--    <div class="slide" style="background-image: url('/images/dessert_intro.jpg');"></div>
+        <div class="slide" style="background-image: url('/images/healthy_food_intro.jpg');"></div> -->
+        <div class="overlay"></div>
+    </div>
+
+    <!-- 🎯 인트로 -->
+<div class="hero-content">
+    <h1>Tastely 오늘은 어떤 요리를 배워 볼까요?</h1>
+    <form th:action="@{/recipes/search}" method="get">
+        <input type="text" name="keyword" placeholder="예: 김치찌개, 파스타, 케이크">
+    </form>
+</div>
+
+<!-- 🍽 인기 레시피 -->
+<div class="section">
+    <h2 style="text-align:center;">🔥 인기 레시피</h2>
+    <div class="recipes-preview">
+        <div class="card" th:each="recipe : ${recommendedRecipes}">
+            <img th:src="@{'/images/' + ${recipe.thumbnail}}" alt="recipe">
+            <p th:text="${recipe.title}">레시피 제목</p>
+        </div>
+    </div>
+</div>
+
+<!-- 📚 카테고리 바로가기 -->
+<div class="section">
+    <h2 style="text-align:center;">카테고리 둘러보기</h2>
+    <div class="tag-list">
+        <a href="/recipes?tag=한식"># 한식</a>
+        <a href="/recipes?tag=양식"># 양식</a>
+        <a href="/recipes?tag=중식"># 중식</a>
+        <a href="/recipes?tag=디저트"># 디저트</a>
+        <a href="/recipes?tag=건강식"># 건강식</a>
+    </div>
+</div>
+
+<!-- 🧑‍🍳 CTA -->
+<div class="section cta">
+    <h2>🍳 나만의 레시피를 공유해보세요!</h2>
+    <a href="/register">지금 시작하기</a>
+</div>
+
+<script>
+    let slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    function showNextSlide() {
+        slides[current].classList.remove('active');
+        current = (current + 1) % slides.length;
+        slides[current].classList.add('active');
+    }
+
+    setInterval(showNextSlide, 5000);
+</script>
+
 </body>
 </html>
