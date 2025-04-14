@@ -56,28 +56,28 @@
     <table>
         <tr>
             <th>제목</th>
-            <td><input type="text" name="title" placeholder="예: 김치찌개" /></td>
+            <td><input type="text" name="recipe.title" placeholder="예: 김치찌개" /></td>
         </tr>
         <tr>
             <th>설명</th>
-            <td><textarea name="description" rows="4" placeholder="레시피 설명 입력"></textarea></td>
+            <td><textarea name="recipe.description" rows="4" placeholder="레시피 설명 입력"></textarea></td>
         </tr>
         <tr>
             <th>썸네일</th>
-            <td><input type="text" name="thumbnail" placeholder="이미지 URL 또는 파일명" /></td>
+            <td><input type="text" name="recipe.thumbnail" placeholder="이미지 URL 또는 파일명" /></td>
         </tr>
         <tr>
             <th>인분</th>
-            <td><input type="number" name="servings" min="1" /></td>
+            <td><input type="number" name="recipe.servings" min="1" /></td>
         </tr>
         <tr>
             <th>조리 시간</th>
-            <td><input type="number" name="cookTime" min="1" placeholder="분 단위" /></td>
+            <td><input type="number" name="recipe.cookTime" min="1" placeholder="분 단위" /></td>
         </tr>
         <tr>
             <th>난이도</th>
             <td>
-                <select name="difficulty">
+                <select name="recipe.difficulty">
                     <option value="EASY">쉬움</option>
                     <option value="MEDIUM">보통</option>
                     <option value="HARD">어려움</option>
@@ -86,8 +86,34 @@
         </tr>
         <tr>
             <th>작성자 ID</th>
-            <td><input type="number" name="userId" min="1" /></td>
+            <td><input type="number" name="recipe.userId" min="1" /></td>
         </tr>
+        <tr>
+            <th>재료</th>
+            <td>
+                <div id="ingredients">
+                    <!-- 초기 입력 필드 1개 -->
+                    <div class="ingredient-row">
+                        <input type="text" name="ingredients[0].name" placeholder="재료명 (예: 양파)" required />
+                        <input type="text" name="ingredients[0].amount" placeholder="수량 (예: 1개)" required />
+                    </div>
+                </div>
+                <button type="button" onclick="addIngredient()">+ 재료 추가</button>
+            </td>
+        </tr>
+
+        <tr>
+            <th>조리 순서</th>
+            <td>
+                <div id="steps">
+                    <div class="step-row">
+                        <textarea name="steps[0].description" placeholder="1단계: 재료 손질" required></textarea>
+                    </div>
+                </div>
+                <button type="button" onclick="addStep()">+ 조리 단계 추가</button>
+            </td>
+        </tr>
+
         <tr>
             <td colspan="2">
                 <button type="submit">등록하기</button>
@@ -95,5 +121,39 @@
         </tr>
     </table>
 </form>
+
+<script>
+    let ingredientIndex = 1;
+    function addIngredient() {
+        const container = document.getElementById("ingredients");
+
+        const row = document.createElement("div");
+        row.className = "ingredient-row";
+        row.innerHTML = `
+        <input type="text" name="ingredients[${ingredientIndex}].name" placeholder="재료명" required />
+        <input type="text" name="ingredients[${ingredientIndex}].amount" placeholder="수량" required />
+        `;
+        container.appendChild(row);
+        ingredientIndex++;
+    }
+</script>
+
+<script>
+    let stepIndex = 1;
+
+    function addStep() {
+        const container = document.getElementById("steps");
+
+        const row = document.createElement("div");
+        row.className = "step-row";
+        row.innerHTML = `
+            <textarea name="steps[${stepIndex}].description" placeholder="${stepIndex + 1}단계: 내용을 입력하세요" required></textarea>
+        `;
+        container.appendChild(row);
+        stepIndex++;
+    }
+</script>
+
+
 </body>
 </html>
