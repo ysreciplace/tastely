@@ -1,4 +1,28 @@
 <!-- resources/templates/home.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>홈 화면</title>
+</head>
+<body>
+<h1>인기 레시피 목록</h1>
+
+<div>
+    <ul>
+        <th:block th:each="recipe : ${recipes}">
+            <li>
+                <h2 th:text="${recipe.title}"></h2>
+                <p th:text="${recipe.description}"></p>
+                <img th:src="@{${recipe.thumbnail}}" alt="Recipe Image" width="200">
+            </li>
+        </th:block>
+    </ul>
+</div>
+</body>
+</html>
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -40,5 +64,7 @@
         </div>
     </div>
 </div>
+
+
 </body>
 </html>
