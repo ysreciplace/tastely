@@ -52,7 +52,7 @@
 </head>
 <body>
 <h2>레시피 등록 </h2>
-<form th:action="@{/recipe/history}" method="post">
+<form th:action="@{/recipe/history}" method="post" enctype="multipart/form-data">
     <table>
         <tr>
             <th>제목</th>
@@ -64,7 +64,7 @@
         </tr>
         <tr>
             <th>썸네일</th>
-            <td><input type="text" name="recipe.thumbnail" placeholder="이미지 URL 또는 파일명" /></td>
+            <td><input type="file" name="thumbnailFile" accept="image/*" /></td>
         </tr>
         <tr>
             <th>인분</th>
@@ -153,7 +153,5 @@
         stepIndex++;
     }
 </script>
-
-
 </body>
 </html>
