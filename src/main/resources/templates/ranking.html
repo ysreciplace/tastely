@@ -9,13 +9,7 @@
 <body>
 <h1>인기 레시피</h1>
 
-<div th:each="recipe : ${popularRecipes}">
-    <h3 th:text="${recipe.title}">레시피 제목</h3>
-    <p th:text="${recipe.description}">부가 설명</p>
-    <p>By <span th:text="${recipe.nickname}">유저 닉네임</span></p>
-    <img th:src="@{${recipe.thumbnail}}" alt="썸네일" width="200"/>
-    <hr/>
-</div>
+
 
 </body>
 </html>
