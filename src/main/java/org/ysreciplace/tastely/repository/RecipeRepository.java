@@ -6,4 +6,6 @@ import org.ysreciplace.tastely.entity.Recipe;
 @Mapper
 public interface RecipeRepository {
     public int save(Recipe recipe);
+
+
 }

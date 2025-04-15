@@ -1,0 +1,129 @@
+<!-- resources/templates/ranking.html -->
+
+<!-- templates/ranking.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>레시피 랭킹</title>
+</head>
+<body>
+<h1>인기 레시피</h1>
+
+<div th:each="recipe : ${popularRecipes}">
+    <h3 th:text="${recipe.title}">레시피 제목</h3>
+    <p th:text="${recipe.description}">부가 설명</p>
+    <p>By <span th:text="${recipe.nickname}">유저 닉네임</span></p>
+    <img th:src="@{${recipe.thumbnail}}" alt="썸네일" width="200"/>
+    <hr/>
+</div>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>인기 레시피 랭킹</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+        }
+
+        nav {
+            background-color: #ffb347;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            margin-top: 40px;
+            color: #333;
+        }
+
+        .recipe-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            width: 220px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card p {
+            padding: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/home">🏠 홈</a>
+    <a href="/recipes">🍽 레시피</a>
+    <a href="/community">💬 커뮤니티</a>
+    <a href="/mypage">👤 마이페이지</a>
+    <a href="/logout">🚪 로그아웃</a>
+</nav>
+
+<div class="container">
+    <h2>🌟 추천 레시피</h2>
+    <div class="recipe-list">
+        <div class="card" th:each="recipe : ${recommendedRecipes}">
+            <img th:src="@{${recipe.thumbnail}}" alt="추천 레시피 이미지">
+            <p th:text="${recipe.title}">레시피 제목</p>
+        </div>
+    </div>
+
+    <h2>🔥 인기 레시피</h2>
+    <div class="recipe-list">
+        <div class="card" th:each="recipe : ${popularRecipes}">
+            <img th:src="@{${recipe.thumbnail}}" alt="인기 레시피 이미지">
+            <p th:text="${recipe.title}">레시피 제목</p>
+        </div>
+    </div>
+
+    <h2>🆕 신규 레시피</h2>
+    <div class="recipe-list">
+        <div class="card" th:each="recipe : ${newRecipes}">
+            <img th:src="@{${recipe.thumbnail}}" alt="신규 레시피 이미지">
+            <p th:text="${recipe.title}">레시피 제목</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
