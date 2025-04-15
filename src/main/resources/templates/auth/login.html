@@ -61,10 +61,11 @@
 
 <div class="login-container">
     <h2>🍳 로그인하고 레시피를 만나보세요</h2>
-    <form th:action="@{/login}" method="post">
-        <input type="text" name="email" placeholder="이메일 또는 닉네임" required />
+    <form th:action="@{/auth/login}" method="post">
+        <input type="text" name="user-id" placeholder="이메일 또는 닉네임" required /><span th:text="${error}" style="font-size: small; color: red"/>
         <input type="password" name="password" placeholder="비밀번호" required />
         <button type="submit">로그인</button>
+
     </form>
 </div>
 

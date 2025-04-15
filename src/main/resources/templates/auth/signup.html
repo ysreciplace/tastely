@@ -61,8 +61,9 @@
 
 <div class="signup-container">
     <h2>👩‍🍳 Tastely 회원가입</h2>
-    <form th:action="@{/signup}" method="post">
+    <form th:action="@{/auth/signup}" method="post">
         <input type="text" name="nickname" placeholder="닉네임" required />
+        <input type="username" name="username" placeholder="유저이름" required />
         <input type="email" name="email" placeholder="이메일" required />
         <input type="password" name="password" placeholder="비밀번호" required />
         <input type="password" name="confirmPassword" placeholder="비밀번호 확인" required />

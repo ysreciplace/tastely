@@ -3,43 +3,42 @@ package org.ysreciplace.tastely.controller;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.ysreciplace.tastely.entity.User;
 import org.ysreciplace.tastely.repository.UserRepository;
-import org.ysreciplace.tastely.request.EmailCheck;
+import org.ysreciplace.tastely.request.LoginRequest;
 import org.ysreciplace.tastely.service.MailSendService;
-
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class LoginController {
-    private final MailSendService mailSendService;
+
+    private MailSendService mailSendService;
     private UserRepository userRepository;
 
-    public LoginController(MailSendService mailSendService) {
-        this.mailSendService = mailSendService;
-    }
 
     @GetMapping("/login")
-    public String loginHandle(Model model){
+    public String loginHandle(Model model) {
 
-    return "auth/login";
+        return "auth/login";
     }
 
     @PostMapping("/login")
-    public String loginPostHandle(@RequestParam("password") String password,
-                                  @ModelAttribute @Valid EmailCheck email, BindingResult result, @RequestParam("username") String userName,
-                                  Model model, HttpSession session) {
-        if (result.hasErrors()) {
-            User user = userRepository.findByUsernameOrEmail(userName);
-        }else{
-            userRepository.findByUsernameOrEmail(email.getEmail());
+    public String loginPostHandle(@RequestParam("user-id") String userId,
+                                  @RequestParam("password") String password,
+                                  HttpSession session) {
+        User user = userRepository.findByUsernameOrEmail(userId);
+        if (user == null || !user.getPassword().equals(password)){
+            return "redirect:/auth/login";
+        } else {
+            session.setAttribute("user", user);
+            return "redirect:/home";
         }
-        return "redirect:/home";
     }
 
     @GetMapping("/signup")
@@ -57,6 +56,12 @@ public class LoginController {
             userRepository.save(user);
             mailSendService.sendWelcomeMessage(user);
         }
+        return "redirect:/home";
+    }
+
+    @GetMapping("/logout")
+    public String logoutHandle(HttpSession session) {
+        session.invalidate();
         return "redirect:/index";
     }
 }

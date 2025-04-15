@@ -49,7 +49,11 @@ public class MailSendService {
             html += "<p><span style='color : gray'>팀 코드노바 올림</span</</p>";
             messageHelper.setText(html, true);
 
+            mailSender.send(message);
+
         }catch (Exception e ) {
+            log.error("error = {}", e);
+            return false;
 
         }
         return true;
