@@ -2,9 +2,73 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>회원가입 | Tastely</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('/images/food.jpg') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .signup-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 30px;
+            color: #e74c3c;
+            font-size: 28px;
+        }
+
+        .signup-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .signup-container button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .signup-container button:hover {
+            background: #1e8449;
+        }
+    </style>
 </head>
 <body>
+
+<div class="signup-container">
+    <h2>👩‍🍳 Tastely 회원가입</h2>
+    <form th:action="@{/signup}" method="post">
+        <input type="text" name="nickname" placeholder="닉네임" required />
+        <input type="email" name="email" placeholder="이메일" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+        <input type="password" name="confirmPassword" placeholder="비밀번호 확인" required />
+        <button type="submit">회원가입</button>
+    </form>
+</div>
 
 </body>
 </html>
