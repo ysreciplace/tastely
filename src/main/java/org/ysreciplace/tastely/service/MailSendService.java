@@ -3,6 +3,7 @@ package org.ysreciplace.tastely.service;
 import jakarta.mail.internet.MimeMessage;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -52,6 +53,27 @@ public class MailSendService {
             mailSender.send(message);
 
         }catch (Exception e ) {
+            log.error("error = {}", e);
+            return false;
+
+        }
+        return true;
+    }
+
+    public boolean sendEmailVerify(String email, String token) {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, "utf-8");
+            messageHelper.setTo(email);
+            messageHelper.setSubject("이메일 인증합니다.");
+
+            String html = "<h2>반갑습니다, <a href='http://127.0.0.1:8080'>Tastely</a>입니다</h2>";
+            html += "<p><a href='http://127.0.0.1:8080/auth/email-verify/" + email + "/" + token + "'>인증하기</a></p>";
+            messageHelper.setText(html, true);
+            mailSender.send(message);
+
+        } catch (Exception e) {
             log.error("error = {}", e);
             return false;
 
