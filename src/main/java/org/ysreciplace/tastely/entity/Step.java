@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Step {
-
     private Long id;
     private Long recipeId;
     private int stepNumber;

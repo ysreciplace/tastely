@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingredient {
-
     private Long id;
     private Long recipeId;
     private String name;

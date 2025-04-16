@@ -3,11 +3,21 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.ysreciplace.tastely.repository.RecipeRepository">
-    <insert id="save">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into
         recipes (user_id, title, description, thumbnail, servings, cook_time, difficulty, created_at, updated_at)
         values
-        (#{userId},#{title},#{description},#{thumbnail},#{servings},#{cookTime},#{difficulty},#{createdAt},#{updatedAt})
+        (#{userId},#{title},#{description},#{thumbnail},#{servings},#{cookTime},#{difficulty},now(),now() )
+    </insert>
+    <insert id="ingredientSave">
+        insert into
+        ingredients (recipe_id, name, amount)
+        values (#{recipeId}, #{name}, #{amount})
+    </insert>
+    <insert id="stepSave">
+        insert into
+        steps (recipe_id,step_number,description,image)
+        values(#{recipeId},#{stepNumber},#{description},#{image})
     </insert>
     <select id="findByUserId" resultType="recipe">
         select * from recipes

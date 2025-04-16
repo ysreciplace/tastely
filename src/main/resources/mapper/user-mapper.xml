@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ysreciplace.tastely.repository.UserRepository">
+    <insert id="save">
+        insert into
+            users(username, password, email, nickname, profile_image,
+                    role, provider, provider_id, verified, created_at)
+        values
+            (#{username}, #{password}, #{email}, #{nickname}, #{profileImage},
+                #{role}, #{provider}, #{providerId}, #{verified}, now())
+    </insert>
+    <select id="findByUsernameOrEmail" resultType="user" >
+        select * from users where username=#{data} or email=#{data}
+    </select>
+
+    <select id="findByProviderAndProviderId" resultType="user">
+        select * from users where provider=#{provider} and provider_id=#{providerId}
+    </select>
+
+    <update id="updatePasswordByEmail">
+        update user set password=#{password} where email=#{email}
+    </update>
+
+    <update id="updateUserVerified">
+        update user set verified='T' where email=#{email}
+    </update>
+</mapper>
