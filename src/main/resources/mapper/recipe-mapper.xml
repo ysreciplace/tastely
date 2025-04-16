@@ -24,4 +24,9 @@
         where user_id=#{userId}
         order by create_at asc, id asc
     </select>
+    <select id="findById" resultType="recipe">
+        select * from recipes
+        where id=#{id}
+        order by created_at asc, id asc
+    </select>
 </mapper>

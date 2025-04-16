@@ -6,12 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.ysreciplace.tastely.entity.Ingredient;
-import org.ysreciplace.tastely.entity.Recipe;
-import org.ysreciplace.tastely.entity.Step;
-import org.ysreciplace.tastely.repository.IngredientRepository;
-import org.ysreciplace.tastely.repository.RecipeRepository;
-import org.ysreciplace.tastely.repository.StepRepository;
+import org.ysreciplace.tastely.entity.*;
+import org.ysreciplace.tastely.repository.*;
 import org.ysreciplace.tastely.request.NewRecipe;
 
 import java.io.BufferedReader;
@@ -29,12 +25,25 @@ import java.util.UUID;
 @AllArgsConstructor
 public class RecipeController {
 
+    private final UserRepository userRepository;
     private RecipeRepository recipeRepository;
+    private ReviewRepository reviewRepository;
 
-    @GetMapping("/history")
-    public String historyHandel(Model model) {
+    @GetMapping("/detail/{id}")
+    public String getRecipeDetail(@PathVariable("id") Long id,
+                                  @SessionAttribute("user") User user,
+                                  Model model) {
+        Recipe recipe = recipeRepository.findById(id);
+        List<Review> reviews = reviewRepository.findByRecipeId(id);
+        double averageRating = reviewRepository.findAverageRatingByRecipeId(id);
 
-        return "recipe/history";
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("averageRating", averageRating);
+        model.addAttribute("user", user);
+        model.addAttribute("currentUserId", 1L); // 임시 사용자 ID, 로그인 시스템 연동 시 수정
+
+        return "recipe/detail"; // 이 페이지에서 review-section.html을 포함
     }
 
     @PostMapping("/history")
