@@ -32,7 +32,6 @@ public class RankingController {
         // 모델에 레시피 데이터 추가
         model.addAttribute("popularRecipes", popularRecipes);
 
-
         List<Recipe> newRecipes =rankingRepository.findLatestRecipes();
         model.addAttribute("newRecipes", newRecipes);
 
@@ -46,7 +45,6 @@ public class RankingController {
         model.addAttribute("recipe" , rankingRepository.getRecipeDetailById(id));
         model.addAttribute("ingredients" , rankingRepository.getIngredientsByRecipeId(id));
         model.addAttribute("steps" , rankingRepository.getStepsByRecipeId(id));
-
 
         return "recipe/view";
     }

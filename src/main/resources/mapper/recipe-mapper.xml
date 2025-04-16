@@ -29,4 +29,9 @@
         where id=#{id}
         order by created_at asc, id asc
     </select>
+    <select id="searchByKeyword" resultType="recipe">
+        select * from recipes
+        where title like concat('%', #{keyword}, '%')
+          or description like concat('%', #{keyword}, '%')
+    </select>
 </mapper>

@@ -29,6 +29,14 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
     private ReviewRepository reviewRepository;
 
+    @GetMapping("/search")
+    public String searchRecipeHandle(@RequestParam("keyword")String keyword, Model model) {
+        List<Recipe> recipes = recipeRepository.searchByKeyword(keyword);
+        model.addAttribute("recipes",recipes);
+        model.addAttribute("keyword",keyword);
+        return "recipe/search";  //레시피 찾기기능
+    }
+
     @GetMapping("/detail/{id}")
     public String getRecipeDetail(@PathVariable("id") Long id,
                                   @SessionAttribute("user") User user,
@@ -83,12 +91,10 @@ public class RecipeController {
                     System.out.println(line);
                 }
             }
-
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new RuntimeException("SCP failed with exit code" + exitCode);
             }
-
             //4.썸네일 경로 DB에 저장
             recipe.setThumbnail("http://54.180.114.141/uploads/" +  savedFilename);
 
@@ -104,14 +110,11 @@ public class RecipeController {
             one.setRecipeId(newRecipe.getRecipe().getId());
             recipeRepository.ingredientSave(one);
         }
-
         for (Step one: newRecipe.getSteps() ) {
             one.setRecipeId(newRecipe.getRecipe().getId());
             recipeRepository.stepSave(one);
         }
-
         return "redirect:/recipe/history";
-
     }
 
 }
