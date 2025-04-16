@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>레시피 상세</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .recipe-header {
+            margin-bottom: 20px;
+        }
+
+        .recipe-thumbnail {
+            max-width: 300px;
+            border-radius: 10px;
+        }
+
+        .review-card {
+            position: relative;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .review-user {
+            font-weight: bold;
+        }
+
+        .review-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .stars {
+            color: gold;
+            margin-left: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin-top: 10px;
+        }
+
+        select, input[type="text"] {
+            padding: 5px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 6px 12px;
+            margin-top: 8px;
+        }
+
+        .review-form {
+            margin-top: 30px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .delete-btn {
+            background-color: crimson;
+            color: white;
+        }
+
+        .update-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="recipe-header">
+    <h2 th:text="${recipe.title}">레시피 제목</h2>
+    <img th:src="@{${recipe.thumbnail}}" alt="레시피 이미지" class="recipe-thumbnail"/>
+</div>
+
+<h3>📌 리뷰 목록</h3>
+<div th:each="review : ${reviews}" class="review-card">
+
+    <div class="review-header">
+        <div>
+            <span class="review-user">작성자: <span th:text="${user.nickname}"></span></span>
+            <span class="stars" th:utext="${'★'.repeat(review.rating)}"></span>
+        </div>
+        <div class="review-actions">
+            <form th:action="@{/review/delete}" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${review.id}" />
+                <input type="hidden" name="recipeId" th:value="${review.recipeId}" />
+                <button type="submit" class="delete-btn">🗑 삭제</button>
+            </form>
+        </div>
+    </div>
+
+    <form th:action="@{/review/update}" method="post">
+        <input type="hidden" name="id" th:value="${review.id}" />
+        <input type="hidden" name="recipeId" th:value="${recipe.id}" />
+        <input type="hidden" name="userId" th:value="${user.id}" />
+
+        <textarea name="comment"
+                  th:text="${review.comment}"
+                  oninput="autoResize(this)"
+                  placeholder="리뷰 수정 내용 입력"
+                  style="box-sizing:border-box; width: 100%; height:auto; resize: none; overflow: hidden;"></textarea>
+        <div>
+            <label>평점:
+                <select name="rating">
+                    <option th:each="i: ${#numbers.sequence(1,5)}"
+                            th:value="${i}" th:text="${i}"
+                            th:selected="${review.rating == i}">
+                    </option>
+                </select>
+            </label>
+            <button type="submit" class="update-btn">💾 수정</button>
+        </div>
+    </form>
+
+</div>
+
+<h3>✍ 리뷰 작성</h3>
+<form th:action="@{/review/add}" method="post" class="review-form">
+    <input type="hidden" name="recipeId" th:value="${recipe.id}" />
+    <input type="hidden" name="userId" th:value="${user.id}" />
+    <label>평점:
+        <select name="rating">
+            <option th:each="i : ${#numbers.sequence(1,5)}"
+                    th:value="${i}" th:text="${i}"></option>
+        </select>
+    </label>
+    <br/>
+    <label>리뷰 내용:</label>
+    <textarea name="comment" placeholder="맛은 어땠나요?"></textarea>
+    <br/>
+    <button type="submit" class="update-btn">✅ 작성</button>
+</form>
+
+<script>
+    function autoResize(textarea){
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
+    //페이지 로드시 초기화
+
+</script>
+
+</body>
+</html>
