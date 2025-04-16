@@ -153,7 +153,7 @@
 <div class="slider">
     <div class="slide active" style="background-image: url('/images/korean_cuisine_intro.jpg');"></div>
     <div class="slide" style="background-image: url('/images/japan_cuisine_intro.jpg');"></div>
-    <div class="slide" style="background-image: url('/images/chinese_cuisine_intro.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/japan_cuisine_intro.jpg');"></div>
     <!--    <div class="slide" style="background-image: url('/images/dessert_intro.jpg');"></div>
         <div class="slide" style="background-image: url('/images/healthy_food_intro.jpg');"></div> -->
         <div class="overlay"></div>
@@ -175,6 +175,10 @@
             <img th:src="@{'/images/' + ${recipe.thumbnail}}" alt="recipe">
             <p th:text="${recipe.title}">레시피 제목</p>
         </div>
+    </div>
+    <!-- 더보기 링크 추가 -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/ranking" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">더보기 →</a>
     </div>
 </div>
 
