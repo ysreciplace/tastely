@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${recipe.title}">레시피 상세</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap">
+    <style>
+        * { box-sizing: border-box; font-family: 'Noto Sans KR', sans-serif; }
+        body { margin: 0; padding: 0; background-color: #fff; color: #333; }
+
+        .container { max-width: 960px; margin: 40px auto; padding: 0 20px; }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .title {
+            font-size: 32px; font-weight: bold;
+        }
+
+        .review-btn {
+            background-color: #ff6b6b; color: white;
+            border: none; padding: 10px 18px;
+            border-radius: 5px; font-size: 14px;
+            cursor: pointer; transition: 0.3s ease;
+        }
+
+        .review-btn:hover {
+            background-color: #e55a5a;
+        }
+
+        .top-info {
+            margin-top: 30px; display: flex; gap: 30px;
+        }
+
+        .thumbnail {
+            width: 400px; height: auto; border-radius: 10px;
+        }
+
+        .meta {
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+
+        .meta-item {
+            margin-bottom: 12px; font-size: 16px;
+        }
+
+        .meta-label {
+            font-weight: bold;
+        }
+
+        section {
+            margin-top: 50px;
+        }
+
+        h2 {
+            font-size: 24px; margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b6b; display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        ul {
+            list-style: none; padding-left: 0;
+        }
+
+        .ingredient-item {
+            margin-bottom: 8px;
+        }
+
+        .step {
+            margin-bottom: 40px;
+            display: flex; gap: 20px; align-items: flex-start;
+        }
+
+        .step img {
+            width: 200px; height: auto; border-radius: 8px;
+        }
+
+        .step-desc {
+            flex: 1;
+        }
+
+        .step-number {
+            font-weight: bold; font-size: 18px;
+            margin-bottom: 6px;
+        }
+
+        .footer-space {
+            margin-bottom: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+
+    <!-- 상단 썸네일 + 요약 정보 -->
+    <div class="top-info">
+        <img class="thumbnail" th:src="@{${recipe.thumbnail}}" alt="레시피 이미지"/>
+        <div class="meta">
+            <div class="meta-item"><span class="meta-label">요리 시간:</span> <span th:text="${recipe.cookTime} + ' 분'"></span></div>
+            <div class="meta-item"><span class="meta-label">난이도:</span> <span th:text="${recipe.difficulty}"></span></div>
+            <div class="meta-item"><span class="meta-label">작성자 ID:</span> <span th:text="${recipe.userId}"></span></div>
+            <div class="meta-item"><span class="meta-label">작성일:</span> <span th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
+        </div>
+    </div>
+
+    <!-- 설명 -->
+    <section>
+        <h2>레시피 설명</h2>
+        <p th:text="${recipe.description}"></p>
+    </section>
+
+    <!-- 재료 목록 -->
+    <section>
+        <h2>재료</h2>
+        <ul>
+            <li class="ingredient-item" th:each="one : ${ingredients}">
+                <span th:text="${one.name}"></span> - <span th:text="${one.amount}"></span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- 조리 순서 -->
+    <section>
+        <h2>조리 순서</h2>
+        <div th:each="step : ${steps}" class="step">
+            <img th:src="@{${step.image}}" alt="조리 이미지"/>
+            <div class="step-desc">
+                <div class="step-number" th:text="'STEP ' + ${step.stepNumber}"></div>
+                <div th:text="${step.description}"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-space"></div>
+</div>
+</body>
+</html>
