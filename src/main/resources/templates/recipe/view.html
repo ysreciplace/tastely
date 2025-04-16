@@ -176,10 +176,10 @@
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <div class="title" th:text="${recipe.title}">레시피 제목</div>
-        <button class="review-btn">리뷰 등록</button>
+        <a class="review-btn" th:href="@{/recipe/history}">리뷰 등록</a>
     </div>
 
-    <img class="thumbnail" th:src="@{${recipe.thumbnail}}" alt="레시피 이미지"/>
+    <img class="thumbnail" th:src="@{${recipe.thumbnail}}" th:method="post" alt="레시피 이미지"/>
 
     <div class="info-grid">
         <div class="info-item">
@@ -192,7 +192,7 @@
         </div>
         <div class="info-item">
             <span class="info-label">👤 작성자 ID:</span>
-            <span th:text="${recipe.userId}"></span>
+            <span th:text="${recipe.id}"></span>
         </div>
         <div class="info-item">
             <span class="info-label">🗓 작성일:</span>

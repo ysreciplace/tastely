@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>레시피 등록</title>
@@ -140,10 +140,8 @@
 
 <script>
     let stepIndex = 1;
-
     function addStep() {
         const container = document.getElementById("steps");
-
         const row = document.createElement("div");
         row.className = "step-row";
         row.innerHTML = `
