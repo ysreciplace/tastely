@@ -68,17 +68,13 @@
 
     </form>
 
-    <div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
         <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/kakao_login.png}"/>
+            <img th:src="@{/icons/kakao_login.png}" style="height: 40px;" />
         </a>
-    </div>
-    <div>
-        <a th:href="@{https://nid.naver.com/oauth2.0/authorize
-        (client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code' )}">
-            <img th:src="@{/icons/naver_login.png}"/>
+        <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
+            <img th:src="@{/icons/naver_login.png}" style="height: 40px;" />
         </a>
-
     </div>
 </div>
 

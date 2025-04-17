@@ -71,16 +71,12 @@
     </form>
 </div>
 
-<div>
-    <a th:href="@{https://kauth.kakao.com/oauth/authorize
-            (client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code' )}">
-        <img th:src="@{/icons/kakao_login.png}"/>
+<div style="margin-top: 10px;">
+    <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
+        <img th:src="@{/icons/kakao_login.png}" style="width:100%; max-width:300px; margin-top:10px;" />
     </a>
-</div>
-<div>
-    <a th:href="@{https://nid.naver.com/oauth2.0/authorize(response_type='code', client_id=${naverClientId},
-                                    redirect_uri=${naverRedirectUri}, state='codenova')}">
-        <img th:src="@{/icons/naver_login.png}"/>
+    <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
+        <img th:src="@{/icons/naver_login.png}" style="width:100%; max-width:300px; margin-top:10px;" />
     </a>
 </div>
 
