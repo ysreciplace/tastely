@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title th:text="${recipe.title}">레시피 상세</title>
     <!-- head 안에 이거 추가 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
 
     <style>
         * {
@@ -25,7 +26,7 @@
             background-color: #800020;
             padding: 16px 0;
             text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -35,7 +36,7 @@
         nav a {
             color: #fdf6f0;
             margin: 0 20px;
-            text-decoration: none;
+            text-decoration: none !important;;
             font-weight: 600;
             font-size: 16px;
             transition: color 0.3s ease;
@@ -51,7 +52,7 @@
             padding: 40px;
             background-color: #ffffff;
             border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
 
         .title {
@@ -69,7 +70,7 @@
             object-fit: cover;
             border-radius: 10px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
         .info-grid {
@@ -119,14 +120,14 @@
             background: #fff7f5;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
         }
 
         .step img {
             width: 220px;
             height: auto;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .step-desc {
@@ -162,6 +163,24 @@
             background-color: #e55a5a;
         }
 
+        a {
+            text-decoration: none;
+        }
+
+        .favorite-btn {
+            background: none; /* 배경 없애기 */
+            border: none; /* 테두리 없애기 */
+            font-size: 32px; /* 아이콘 크기 키우기 */
+            cursor: pointer;
+            padding: 0;
+            margin-left: 10px; /* 원하는 위치 조정용 */
+            transition: transform 0.2s ease;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1); /* 호버 시 살짝 확대 효과 */
+        }
+
     </style>
 </head>
 <body>
@@ -175,8 +194,15 @@
 
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <div class="title" th:text="${recipe.title}">레시피 제목</div>
-        <a class="review-btn" th:href="@{/recipe/history}">리뷰 등록</a>
+        <div style="display: flex; align-items: center;">
+            <div class="title" style="margin: 0;" th:text="${recipe.title}">레시피 제목</div>
+                <button class="favorite-btn"
+                        id="favoriteBtn"
+                        th:data-recipe-id="${recipe.id}"
+                        th:text="${isFavorite} ? '⭐' : '☆'">
+                </button>
+        </div>
+        <a class="review-btn" th:href="@{/recipe/detail/{id}(id=${recipe.id})}">리뷰 등록</a>
     </div>
 
     <img class="thumbnail" th:src="@{${recipe.thumbnail}}" th:method="post" alt="레시피 이미지"/>
@@ -192,7 +218,7 @@
         </div>
         <div class="info-item">
             <span class="info-label">👤 작성자 ID:</span>
-            <span th:text="${recipe.id}"></span>
+            <span th:text="${user.nickname}"></span>
         </div>
         <div class="info-item">
             <span class="info-label">🗓 작성일:</span>
@@ -226,6 +252,36 @@
     </section>
 
     <div class="footer-space"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const favoriteBtn = document.getElementById("favoriteBtn");
+            favoriteBtn.addEventListener("click", function () {
+                const recipeId = this.getAttribute("data-recipe-id");
+
+                fetch("/favorite/toggle", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "recipeId=" + recipeId
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 응답에 따라 버튼 텍스트 변경
+                        if (data.isFavorite) {
+                            favoriteBtn.innerHTML = "☆";
+                        } else {
+                            favoriteBtn.innerHTML = "⭐";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("즐겨찾기 요청 실패:", error);
+                    });
+            });
+        });
+    </script>
+
 </div>
 </body>
 </html>

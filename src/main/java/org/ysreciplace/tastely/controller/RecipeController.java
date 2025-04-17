@@ -25,6 +25,12 @@ public class RecipeController {
     private final UserRepository userRepository;
     private RecipeRepository recipeRepository;
     private ReviewRepository reviewRepository;
+    private FavoriteRepository favoriteRepository;
+
+    @GetMapping("/history")
+    public String historyHandle(Model model) {
+        return "recipe/history";
+    }
 
     @GetMapping("/search")
     public String searchRecipeHandle(@RequestParam("keyword")String keyword, Model model) {
@@ -42,10 +48,13 @@ public class RecipeController {
         List<Review> reviews = reviewRepository.findByRecipeId(id);
         double averageRating = reviewRepository.findAverageRatingByRecipeId(id);
 
+        boolean isFavorite = favoriteRepository.exists((long)user.getId(), id);
+
         model.addAttribute("recipe", recipe);
         model.addAttribute("reviews", reviews);
         model.addAttribute("averageRating", averageRating);
         model.addAttribute("user", user);
+        model.addAttribute("isFavorite",isFavorite);
 
         return "recipe/detail"; // 이 페이지에서 review-section.html을 포함
     }
