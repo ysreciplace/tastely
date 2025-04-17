@@ -1,7 +1,6 @@
 package org.ysreciplace.tastely.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -49,7 +46,6 @@ public class RecipeController {
         model.addAttribute("reviews", reviews);
         model.addAttribute("averageRating", averageRating);
         model.addAttribute("user", user);
-        model.addAttribute("currentUserId", 1L); // 임시 사용자 ID, 로그인 시스템 연동 시 수정
 
         return "recipe/detail"; // 이 페이지에서 review-section.html을 포함
     }
