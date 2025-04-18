@@ -18,6 +18,7 @@ public interface UserRepository {
     int updatePasswordByEmail(@Param("email") String email,
                               @Param("password") String password);
 
-    int updateUserVerified(@Param("email") String email);
+    int updateUserVerified(String email);
+
     User findById(Long id);
 }

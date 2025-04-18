@@ -176,18 +176,19 @@
 </head>
 <body>
 
-<!-- 🧭 네비게이션 -->
-<nav>
-    <a href="/" class="logo">Recipe Journal</a>
-    <div>
-        <a href="/recipe/page">레시피</a>
-        <a href="/community">커뮤니티</a>
-        <a href="/mypage">마이페이지</a>
-        <a href="/logout">로그아웃</a>
-    </div>
+<nav th:if="${found == true}">
+    <a href="/recipes">🍽 레시피</a>
+    <a href="/community">💬 커뮤니티</a>
+    <a th:href="@{/page}">👤 마이페이지</a>
+    <a th:href="@{/auth/logout}">🚪 로그아웃</a>
 </nav>
 
-<!-- 📌 콘텐츠 -->
+<nav th:if="${found == false}">
+    <a href="/recipes">🍽 레시피</a>
+    <a href="/community">💬 커뮤니티</a>
+    <a th:href="@{/auth/login}">👤 로그인</a>
+</nav>
+
 <div class="container">
     <h2 class="section-title">🌟 초간단 레시피</h2>
     <div class="recipe-list quick-recipe-list"> <!-- 초간단 레시피 -->

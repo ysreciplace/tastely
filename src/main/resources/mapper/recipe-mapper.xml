@@ -22,7 +22,7 @@
     <select id="findByUserId" resultType="recipe">
         select * from recipes
         where user_id=#{userId}
-        order by create_at asc, id asc
+        order by created_at asc, id asc
     </select>
     <select id="findAll" resultType="recipe">
         select * from recipes
