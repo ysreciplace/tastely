@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인 | Tastely</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -10,6 +11,7 @@
             background: url('/images/food.jpg') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Noto Sans KR', sans-serif;
+            color: #222;
         }
 
         .login-container {
@@ -17,91 +19,117 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.96);
+            padding: 48px 40px;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 350px;
+            width: 380px;
         }
 
-        .login-container h2 {
-            margin-bottom: 30px;
-            color: #e74c3c;
+        h2 {
+            font-family: 'Playfair Display', serif;
             font-size: 28px;
+            color: #1e1e1e;
+            margin-bottom: 32px;
         }
 
-        .login-container input {
+        input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            padding: 14px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
+            background-color: #fdfdfd;
+            transition: border-color 0.3s;
         }
 
-        .login-container button {
-            background: #e67e22;
+        input:focus {
+            border-color: #333;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #333;
             color: white;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
             font-size: 16px;
+            padding: 14px;
+            border: none;
+            width: 100%;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
-        .login-container button:hover,
-        .login-container a img:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
-            transition: all 0.3s ease;
+        button[type="submit"]:hover {
+            background-color: #111;
         }
 
-        .login-container a img {
-            height: 40px;
-            transition: all 0.3s ease;
-            border-radius: 8px;
+        .error-msg {
+            font-size: 13px;
+            color: red;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: block;
         }
-        .signup-guide {
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
             margin-top: 20px;
+        }
+
+        .social-login img {
+            height: 40px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .social-login img:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .signup-guide {
+            margin-top: 24px;
             font-size: 14px;
-            color: #000;
+            color: #555;
         }
 
         .signup-guide a {
             color: #000;
             text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
+            font-weight: 600;
         }
 
         .signup-guide a:hover {
             color: #007bff;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
 <div class="login-container">
-    <h2>🍳 로그인하고 레시피를 만나보세요</h2>
+    <h2> Tastely 회원가입</h2>
     <form th:action="@{/auth/login}" method="post">
-        <input type="text" name="user-id" placeholder="이메일 또는 닉네임" required /><span th:text="${error}" style="font-size: small; color: red"/>
+        <input type="text" name="user-id" placeholder="이메일 or 닉네임" required />
+        <span th:text="${error}" class="error-msg"></span>
         <input type="password" name="password" placeholder="비밀번호" required />
         <button type="submit">로그인</button>
-
     </form>
 
-    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+    <div class="social-login">
         <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/kakao_login.png}" style="height: 40px;" />
+            <img th:src="@{/icons/kakao_login.png}" alt="카카오 로그인" />
         </a>
         <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/naver_login.png}" style="height: 40px;" />
+            <img th:src="@{/icons/naver_login.png}" alt="네이버 로그인" />
         </a>
     </div>
+
     <div class="signup-guide">
         아직 계정이 없으신가요? <a href="/auth/signup">회원가입</a>
     </div>

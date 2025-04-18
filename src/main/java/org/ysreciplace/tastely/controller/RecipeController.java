@@ -136,10 +136,4 @@ public class RecipeController {
         return "recipe"; // templates/recipe.html
     }
 
-    // 레시피 등록 된 폼 페이지 (detail.html)
-    @GetMapping("/recipe/detail")
-    public String showRegisterPage(Model model) {
-        model.addAttribute("recipe", new Recipe()); // 혹시 폼에서 th:object 쓰는 경우를 대비
-        return "detail"; // detail.html로 이동
-    }
 }

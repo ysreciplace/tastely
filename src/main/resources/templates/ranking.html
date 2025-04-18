@@ -68,9 +68,9 @@
             margin-bottom: 60px;
         }
 
-        /* 초간단 레시피는 4개씩 표시 */
+        /* 초간단 레시피는 5개씩 표시 */
         .quick-recipe-list {
-            grid-template-columns: repeat(4, 1fr); /* 4개씩 표시 */
+            grid-template-columns: repeat(5, 1fr); /* ✅ 5개씩 표시 */
         }
 
         /* 인기 레시피는 5개씩 표시 */
@@ -181,7 +181,7 @@
     <a href="/" class="logo">Recipe Journal</a>
     <div>
         <a href="/recipe/page">레시피</a>
-        <a href="/community">커뮤니티</a>
+        <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
         <a href="/mypage">마이페이지</a>
         <a href="/logout">로그아웃</a>
     </div>
