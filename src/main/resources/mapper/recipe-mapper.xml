@@ -41,7 +41,4 @@
         where title like concat('%', #{keyword}, '%')
           or description like concat('%', #{keyword}, '%')
     </select>
-    <select id="findById" resultType="Recipe">
-        SELECT * FROM recipes WHERE id = #{id}
-    </select>
-</mapper>
+ </mapper>
