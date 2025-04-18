@@ -31,6 +31,11 @@
     <select id="findByTitleContain" resultType="recipe">
         select * from recipes where title like concat('%', #{keyword}, '%')
     </select>
+    <select id="findById" resultType="recipe">
+        select * from recipes
+        where id=#{id}
+        order by created_at asc, id asc
+    </select>
     <select id="searchByKeyword" resultType="recipe">
         select * from recipes
         where title like concat('%', #{keyword}, '%')

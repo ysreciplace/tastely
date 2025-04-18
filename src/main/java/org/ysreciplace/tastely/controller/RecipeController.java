@@ -136,4 +136,5 @@ public class RecipeController {
         model.addAttribute("keyword", keyword.orElse(""));  // 검색어도 같이 넘겨줌 (뷰에서 보여줄 수 있게);
         return "recipe"; // templates/recipe.html
     }
+
 }
