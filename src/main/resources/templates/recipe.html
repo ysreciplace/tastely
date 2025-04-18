@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe Magazine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #fafafa;
+            color: #222;
+        }
+
+        header {
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #5e001f;
+            cursor: pointer;
+            text-decoration: none; /* 👈 이거 추가! */
+        }
+
+
+        nav a:hover:not(.logo) {
+            color: #ff6f61;
+        }
+
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff6f61;
+        }
+
+        .hero {
+            padding: 80px 20px 60px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: #111;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            gap: 12px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 14px 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 14px 24px;
+            background-color: #5e001f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-bar button:hover {
+            background-color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #222;
+            font-family: 'Playfair Display', serif; /* 이 부분을 변경함 */
+            font-weight: 700;
+        }
+
+
+        .card-content p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        a.recipe-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                margin-top: 10px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input,
+            .search-bar button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🧭 상단 -->
+<header>
+    <a href="/" class="logo">Recipe Journal</a>
+    <nav>
+        <a href="/recipe/write" style="margin-left: 30px; color: #5e001f; font-weight: bold;">레시피 등록</a> <!-- 👈 이거 추가 -->
+        <a href="/community">커뮤니티</a>
+        <a href="/mypage">마이페이지</a>
+        <a href="/logout">로그아웃</a>
+
+    </nav>
+
+</header>
+
+
+<!-- 🎯 히어로 & 검색 -->
+<section class="hero">
+    <h1>당신의 식탁에 영감을 더하세요</h1>
+    <p>트렌디하고 감각적인 레시피를 선사해드립니다</p>
+    <form class="search-bar" th:action="@{/recipe/page}" method="get">
+        <input type="text" name="keyword" placeholder="예: 감바스, 초코 브라우니, 매콤 닭볶음탕" th:value="${keyword}">
+        <button type="submit">검색</button>
+    </form>
+</section>
+
+<!-- 🧁 레시피 카드 -->
+<div class="container">
+    <div class="grid">
+        <div class="card" th:each="recipe : ${recipes}">
+            <a th:href="@{/recipe/view(id=${recipe.id})}" class="recipe-link">
+                <img th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
+                <div class="card-content">
+                    <h3 th:text="${recipe.title}">레시피 제목</h3>
+                    <p th:text="${recipe.description}">레시피 설명</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

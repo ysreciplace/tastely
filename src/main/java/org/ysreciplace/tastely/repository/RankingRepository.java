@@ -12,7 +12,7 @@ import java.util.List;
 public interface RankingRepository {
     List<Recipe> findLatestRecipes();
     List<Recipe> findQuickRecipes();
-
+    List<Recipe> findPopularRecipes();
 
     public Recipe getRecipeDetailById(@Param("id") Long Id);
     public List<Ingredient> getIngredientsByRecipeId(@Param("recipeId") Long recipeId);

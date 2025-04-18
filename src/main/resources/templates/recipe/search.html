@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>레시피 검색</title>
+</head>
+<body>
+<h1 th:text="'🔍 \'' + ${keyword} + '\' 검색 결과'">검색 결과</h1>
+<div th:if="${recipes.isEmpty()}">
+    <p>검색 결과가 없습니다.</p>
+</div>
+<div th:unless="${recipes.isEmpty()}">
+    <ul>
+        <li th:each="recipe : ${recipes}">
+            <a th:href="@{/recipe/view(id=${recipe.id})}">
+                <img th:src="@{${recipe.thumbnail}}" alt="썸네일" width="100"/>
+                <strong th:text="${recipe.title}">레시피 제목</strong>
+                <p th:text="${recipe.description}">설명</p>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -20,17 +20,19 @@ import java.util.List;
 @AllArgsConstructor
 public class RankingController {
     private RankingRepository rankingRepository;
+    private RecipeRepository recipeRepository;
     private FavoriteRepository favoriteRepository;
+
     // 홈 화면에서 음식 목록을 보여주는 메서드
     @GetMapping("/ranking")
     public String home(Model model) {
         // 음식 목록 데이터 (임시 데이터)
         List<Recipe> popularRecipes = Arrays.asList(
-                Recipe.builder().title("스키야키").description( "맛있는 스키야키 레시피").thumbnail("/images/sukiyaki.jpg").build(),
-                Recipe.builder().title("감바스").description( "무드있는 감바스 레시피").thumbnail("/images/gambas.jpg").build(),
-                Recipe.builder().title("타코").description( "멕시코 현지에 온 듯한 타코 레시피").thumbnail("/images/taco.jpg").build(),
-                Recipe.builder().title("피자").description( "치즈가 쭉쭉 늘어나는 피자 레시피").thumbnail("/images/pizza.jpg").build(),
-                Recipe.builder().title("팟타이").description( "태국의 정통 팟타이 레시피").thumbnail("/images/padthai.jpg").build()
+                Recipe.builder().title("스키야키").description("맛있는 스키야키 레시피").thumbnail("/images/sukiyaki.jpg").build(),
+                Recipe.builder().title("감바스").description("무드있는 감바스 레시피").thumbnail("/images/gambas.jpg").build(),
+                Recipe.builder().title("타코").description("멕시코 현지에 온 듯한 타코 레시피").thumbnail("/images/taco.jpg").build(),
+                Recipe.builder().title("피자").description("치즈가 쭉쭉 늘어나는 피자 레시피").thumbnail("/images/pizza.jpg").build(),
+                Recipe.builder().title("팟타이").description("태국의 정통 팟타이 레시피").thumbnail("/images/padthai.jpg").build()
         );
 
         // 모델에 레시피 데이터 추가
@@ -57,4 +59,11 @@ public class RankingController {
         return "recipe/view";
     }
 
+    @GetMapping("/recipe/search")
+    public String recipeSearchHandle(@RequestParam("keyword") String keyword, Model model) {
+        List<Recipe> searchResults = recipeRepository.findByTitleContain(keyword);
+        model.addAttribute("recipes", searchResults);
+        model.addAttribute("keyword", keyword);  // 검색어도 같이 넘겨줌 (뷰에서 보여줄 수 있게)
+        return "recipe/search";
+    }
 }
