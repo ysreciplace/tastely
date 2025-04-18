@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.ysreciplace.tastely.entity.Comment;
+import org.ysreciplace.tastely.entity.CommentResponse;
 import org.ysreciplace.tastely.entity.Recipe;
 import org.ysreciplace.tastely.entity.User;
+import org.ysreciplace.tastely.repository.CommentRepository;
 import org.ysreciplace.tastely.repository.FavoriteRepository;
 import org.ysreciplace.tastely.repository.RankingRepository;
 import org.ysreciplace.tastely.repository.RecipeRepository;
@@ -18,6 +21,7 @@ import java.util.List;
 @Controller
 @AllArgsConstructor
 public class RankingController {
+    private final CommentRepository commentRepository;
     private RankingRepository rankingRepository;
     private RecipeRepository recipeRepository;
     private FavoriteRepository favoriteRepository;
@@ -47,13 +51,17 @@ public class RankingController {
 
     @GetMapping("/recipe/view")
     public String recipeDetailHandle(@SessionAttribute("user") User user,
-            @RequestParam("id") Long id, Model model) {
+                                     @RequestParam("id") Long id, Model model) {
         model.addAttribute("recipe" , rankingRepository.getRecipeDetailById(id));
         model.addAttribute("ingredients" , rankingRepository.getIngredientsByRecipeId(id));
         model.addAttribute("steps" , rankingRepository.getStepsByRecipeId(id));
         boolean isFavorite = favoriteRepository.exists((long)user.getId(), id);
         model.addAttribute("isFavorite" , isFavorite);
         model.addAttribute("user",user);
+        //List<Comment> comments = commentRepository.findCommentByRecipeId(id);
+        //model.addAttribute("comments",comments);
+        List<CommentResponse> comments = commentRepository.findAllByRecipeIdWithNickname(id);
+        model.addAttribute("comments",comments);
 
         return "recipe/view";
     }

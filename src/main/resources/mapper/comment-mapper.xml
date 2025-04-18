@@ -21,4 +21,9 @@
         delete from comments
         where id = #{id}
     </delete>
+    <select id="findAllByRecipeIdWithNickname" resultType="CommentResponse">
+        SELECT c.id, c.content, u.nickname, c.create_at from Comments c
+        JOIN users u on c.user_id = u.id
+        WHERE c.recipe_id = #{recipeId}
+    </select>
 </mapper>
