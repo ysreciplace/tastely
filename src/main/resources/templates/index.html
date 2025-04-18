@@ -149,7 +149,7 @@
 </head>
 <body>
 <!-- 🔒 상단 로그인/회원가입 버튼 -->
-<div style="position: absolute; top: 20px; right: 30px; z-index: 3;">
+<div style="position: absolute; top: 20px; right: 30px; z-index: 3;" th:if="${session.user == null}">
     <a href="/auth/login"
        style="margin-right: 10px; background: #fff3e0; padding: 10px 20px; border-radius: 20px; text-decoration: none; color: #444; font-weight: bold;">로그인</a>
     <a href="/auth/signup"
@@ -170,8 +170,8 @@
 <!-- 🎯 인트로 -->
 <div class="hero-content">
     <h1>Tastely 오늘은 어떤 요리를 배워 볼까요?</h1>
-    <form th:action="@{/recipes/search}" method="get">
-        <input type="text" name="keyword" id="searchInput" placeholder="예: 김치찌개, 파스타, 케이크">
+    <form th:action="@{/recipe/page}" method="get">
+        <input type="text" name="keyword" placeholder="예: 김치찌개, 파스타, 케이크">
     </form>
 </div>
 

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -41,6 +42,8 @@ public class RecipeController {
         return "recipe/search";  //레시피 찾기기능
     }
 
+
+    // ✅ 상세 페이지
     @GetMapping("/detail/{id}")
     public String getRecipeDetail(@PathVariable("id") Long id,
                                   @SessionAttribute("user") User user,
@@ -57,9 +60,10 @@ public class RecipeController {
         model.addAttribute("user", user);
         model.addAttribute("isFavorite",isFavorite);
 
-        return "recipe/detail"; // 이 페이지에서 review-section.html을 포함
+        return "recipe/detail"; // templates/recipe/detail.html
     }
 
+    // ✅ 레시피 등록 처리
     @PostMapping("/history")
     public String historyPostHandel(@ModelAttribute NewRecipe newRecipe,
                                     @RequestParam("thumbnailFile") MultipartFile thumbnailFile,
@@ -71,7 +75,7 @@ public class RecipeController {
             String originalFilename = thumbnailFile.getOriginalFilename();
             String savedFilename = UUID.randomUUID() + "_" + originalFilename;
 
-            File tempFile = File.createTempFile("upload-","-" + savedFilename);
+            File tempFile = File.createTempFile("upload-", "-" + savedFilename);
             thumbnailFile.transferTo(tempFile);
 
             String privateKeyPath = "C:\\awskey\\dev-kms-key.pem";
@@ -79,14 +83,14 @@ public class RecipeController {
             String host = "54.180.114.141";
             String remoteDir = "/home/ec2-user/uploads";
 
-            String[] scpCommand ={
+            String[] scpCommand = {
                     "scp",
                     "-i", privateKeyPath,
                     "-o", "StrictHostKeyChecking=no",
                     tempFile.getAbsolutePath(),
                     user + "@" + host + ":" + remoteDir + "/" + savedFilename
             };
-            // 3. 명령어 실행
+
             ProcessBuilder pb = new ProcessBuilder(scpCommand);
             pb.redirectErrorStream(true);
             Process process = pb.start();
@@ -99,28 +103,37 @@ public class RecipeController {
             }
             int exitCode = process.waitFor();
             if (exitCode != 0) {
-                throw new RuntimeException("SCP failed with exit code" + exitCode);
+                throw new RuntimeException("SCP failed with exit code " + exitCode);
             }
             //4.썸네일 경로 DB에 저장
             recipe.setThumbnail("http://54.180.114.141/uploads/" +  savedFilename);
-
             tempFile.delete();
         }
-        System.out.println("userId = " + newRecipe.getRecipe().getUserId());
-        System.out.println("=========? "+  newRecipe.getRecipe().getId());
-        recipeRepository.save(recipe);
-        //recipeRepository.save(newRecipe.getRecipe());
-        System.out.println("=======================? "+  newRecipe.getRecipe().getId());
 
-        for (Ingredient one: newRecipe.getIngredients() ) {
-            one.setRecipeId(newRecipe.getRecipe().getId());
+        recipeRepository.save(recipe);
+
+        for (Ingredient one : newRecipe.getIngredients()) {
+            one.setRecipeId(recipe.getId());
             recipeRepository.ingredientSave(one);
         }
-        for (Step one: newRecipe.getSteps() ) {
+
+       for (Step one: newRecipe.getSteps() ) {
             one.setRecipeId(newRecipe.getRecipe().getId());
+
             recipeRepository.stepSave(one);
         }
         return "redirect:/recipe/history";
     }
 
+    // ✅ 전체 레시피 페이지 (recipe.html)
+    @GetMapping("/page")
+    public String showRecipesPage(@RequestParam("keyword") Optional<String> keyword, Model model) {
+//        List<Recipe> allRecipes = recipeRepository.findAll();
+//        model.addAttribute("recipes", allRecipes);
+
+        List<Recipe> searchResults = recipeRepository.findByTitleContain(keyword.orElse(""));
+        model.addAttribute("recipes", searchResults);
+        model.addAttribute("keyword", keyword.orElse(""));  // 검색어도 같이 넘겨줌 (뷰에서 보여줄 수 있게);
+        return "recipe"; // templates/recipe.html
+    }
 }
