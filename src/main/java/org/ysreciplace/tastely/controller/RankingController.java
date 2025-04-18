@@ -15,6 +15,7 @@ import org.ysreciplace.tastely.repository.RecipeRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -23,7 +24,18 @@ public class RankingController {
     private FavoriteRepository favoriteRepository;
     // 홈 화면에서 음식 목록을 보여주는 메서드
     @GetMapping("/ranking")
-    public String home(Model model) {
+    public String home(@SessionAttribute("user") Optional<User> user, Model model) {
+
+        boolean found = user.isPresent();
+
+        if(found){
+            System.out.println(user.get().getNickname());
+            model.addAttribute("user", user.get());
+        }else{
+            System.out.println("asdfasdf");
+        }
+
+
         // 음식 목록 데이터 (임시 데이터)
         List<Recipe> popularRecipes = Arrays.asList(
                 Recipe.builder().title("스키야키").description( "맛있는 스키야키 레시피").thumbnail("/images/sukiyaki.jpg").build(),
@@ -41,6 +53,8 @@ public class RankingController {
 
         List<Recipe> quickRecipes = rankingRepository.findQuickRecipes();
         model.addAttribute("quickRecipes", quickRecipes);
+
+        model.addAttribute("found", found);
         return "ranking";  // ranking.html 템플릿으로 포워딩
     }
 

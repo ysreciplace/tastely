@@ -105,11 +105,17 @@
 </head>
 <body>
 
-<nav>
+<nav th:if="${found == true}">
     <a href="/recipes">🍽 레시피</a>
     <a href="/community">💬 커뮤니티</a>
-    <a href="/mypage">👤 마이페이지</a>
+    <a th:href="@{/page}">👤 마이페이지</a>
     <a th:href="@{/auth/logout}">🚪 로그아웃</a>
+</nav>
+
+<nav th:if="${found == false}">
+    <a href="/recipes">🍽 레시피</a>
+    <a href="/community">💬 커뮤니티</a>
+    <a th:href="@{/auth/login}">👤 로그인</a>
 </nav>
 
 <div class="container">

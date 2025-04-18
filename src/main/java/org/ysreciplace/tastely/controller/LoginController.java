@@ -174,6 +174,7 @@ public class LoginController {
             userRepository.save(user);
             session.setAttribute("user", user);
         }else {
+            System.out.println("로그인 완료");
             session.setAttribute("user", found);
         }
         return "redirect:/ranking";

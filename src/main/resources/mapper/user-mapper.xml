@@ -9,7 +9,7 @@
                     role, provider, provider_id, verified, created_at)
         values
             (#{username}, #{password}, #{email}, #{nickname}, #{profileImage},
-                #{role}, #{provider}, #{providerId}, #{verified}, now())
+                'USER', #{provider}, #{providerId}, #{verified}, now())
     </insert>
     <select id="findByUsernameOrEmail" resultType="user" >
         select * from users where username=#{data} or email=#{data}
@@ -26,4 +26,8 @@
     <update id="updateUserVerified">
         update user set verified='T' where email=#{email}
     </update>
+
+    <select id="findById" resultType="user" >
+        select * from users where id=#{id}
+    </select>
 </mapper>

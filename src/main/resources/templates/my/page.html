@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <style>
+        .mypage-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 40px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        .info-row {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="mypage-container">
+
+    <img class="profile-img" th:src="${user.profileImage}" alt="프로필 이미지">
+    <div th:if="${user.provider=='LOCAL'}">
+        <div class="info-row"><strong>유저이름:</strong> <span th:text="${user.username}"></span></div>
+         <div class="info-row"><strong>이메일:</strong> <span th:text="${user.email}"></span></div>
+    </div>
+    <div th:if="${user.provider != 'LOCAL'}">
+        <div class="info-row"><strong>유저이름:</strong> <span th:text="${user.provider}"></span></div>
+    </div>
+    <div class="info-row"><strong>닉네임:</strong> <span th:text="${user.nickname}"></span></div>
+    <div class="info-row"><strong>권한:</strong> <span th:text="${user.role == 'ADMIN' ? '관리자' : '일반 사용자'}"></span></div>
+    <div class="info-row"><strong>가입일:</strong> <span th:text="${#temporals.format(user.createdAt)}"></span></div>
+</div>
+</body>
+</html>
