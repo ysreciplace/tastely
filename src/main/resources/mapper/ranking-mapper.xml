@@ -13,6 +13,12 @@
             created_at desc
         limit 5
     </select>
+    <select id="findPopularRecipes"  resultType="recipe">
+        select
+        *
+        from recipes
+        where cook_time &lt;=15 order by cook_time limit 5
+    </select>
 
     <select id="findQuickRecipes"  resultType="recipe">
         select
