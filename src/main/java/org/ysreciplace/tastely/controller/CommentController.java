@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.ysreciplace.tastely.entity.Comment;
+import org.ysreciplace.tastely.entity.Recipe;
 import org.ysreciplace.tastely.entity.User;
 import org.ysreciplace.tastely.repository.CommentRepository;
 import org.ysreciplace.tastely.repository.UserRepository;
@@ -41,16 +42,17 @@ public class CommentController {
         return result;
     }
 
-    @GetMapping("recipe/{recipeId}")
+    @GetMapping("/recipe/{recipeId}")
     public String findCommentByRecipeIdHandle(@PathVariable Long recipeId){
         commentRepository.findCommentByRecipeId(recipeId);
         return "redirect:/recipe/detail/" + recipeId;
     }
 
-    @PostMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
     public String deleteCommentHandle(@PathVariable Long id){
         commentRepository.commentDelete(id);
-        return "redirect:/recipe/detail/" + id;
+        return null;
     }
 
     @PostMapping("/update")
