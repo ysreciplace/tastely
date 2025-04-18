@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.ysreciplace.tastely.repository.CommentRepository">
-    <insert id="commentSave" parameterType="Comment">
+    <insert id="commentSave" parameterType="Comment" useGeneratedKeys="true" keyProperty="id">
         insert into comments (recipe_id, user_id, content, created_at)
         values (#{recipeId}, #{userId}, #{content}, NOW())
     </insert>
@@ -21,4 +21,9 @@
         delete from comments
         where id = #{id}
     </delete>
+    <select id="findAllByRecipeIdWithNickname" resultType="CommentResponse">
+        SELECT c.id, c.content, u.nickname, c.created_at from Comments c
+        JOIN users u on c.user_id = u.id
+        WHERE c.recipe_id = #{recipeId}
+    </select>
 </mapper>

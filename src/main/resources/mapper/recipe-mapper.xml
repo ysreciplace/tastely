@@ -22,7 +22,7 @@
     <select id="findByUserId" resultType="recipe">
         select * from recipes
         where user_id=#{userId}
-        order by create_at asc, id asc
+        order by created_at asc, id asc
     </select>
     <select id="findAll" resultType="recipe">
         select * from recipes
@@ -40,5 +40,8 @@
         select * from recipes
         where title like concat('%', #{keyword}, '%')
           or description like concat('%', #{keyword}, '%')
+    </select>
+    <select id="findById" resultType="Recipe">
+        SELECT * FROM recipes WHERE id = #{id}
     </select>
 </mapper>

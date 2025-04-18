@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${recipe.title}">레시피 상세</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -50,7 +54,7 @@
             background: #fff;
             border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
         }
 
         .title {
@@ -67,7 +71,7 @@
             max-height: 400px;
             object-fit: cover;
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
             margin-bottom: 30px;
         }
 
@@ -125,7 +129,7 @@
         .step img {
             width: 200px;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
         }
 
         .step-desc {
@@ -159,9 +163,17 @@
 
 
         @media (max-width: 768px) {
-            .info-box { flex-direction: column; }
-            .step { flex-direction: column; }
-            .step img { width: 100%; }
+            .info-box {
+                flex-direction: column;
+            }
+
+            .step {
+                flex-direction: column;
+            }
+
+            .step img {
+                width: 100%;
+            }
         }
 
         a {
@@ -189,6 +201,7 @@
 <nav>
     <a href="/" class="logo">Recipe Journal</a> <!-- ✅ 로고 클릭 시 인덱스로 이동 -->
     <div>
+
         <a href="/recipe/history" style="margin-left: 30px; color: #5e001f; font-weight: bold;">레시피 등록</a> <!-- 👈 이거 추가 -->
         <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
         <a href="/mypage">마이페이지</a>
@@ -215,10 +228,12 @@
     <img class="thumbnail" th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
 
     <div class="info-box">
-        <div class="info-item"><span class="info-label">⏱ 요리 시간:</span> <span th:text="${recipe.cookTime} + ' 분'"></span></div>
+        <div class="info-item"><span class="info-label">⏱ 요리 시간:</span> <span
+                th:text="${recipe.cookTime} + ' 분'"></span></div>
         <div class="info-item"><span class="info-label">📈 난이도:</span> <span th:text="${recipe.difficulty}"></span></div>
         <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${recipe.userId}"></span></div>
-        <div class="info-item"><span class="info-label">🗓 작성일:</span> <span th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
+        <div class="info-item"><span class="info-label">🗓 작성일:</span> <span
+                th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
     </div>
     <section>
         <h2>레시피 설명</h2>
@@ -244,6 +259,36 @@
             </div>
         </div>
     </section>
+
+    <!-- 댓글 입력 폼 -->
+    <form id="commentForm" class="comment-form" style="margin-top: 30px;">
+        <input type="hidden" id="recipeId" th:value="${recipe.id}"/>
+        <input type="hidden" id="userId" th:value="${user.id}"/>
+        <textarea id="commentContent" placeholder="댓글을 입력하세요."
+                  style="width: 100%; height: 60px; border-radius: 6px; padding: 8px;"></textarea>
+        <button type="submit"
+                style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px;">
+            등록
+        </button>
+    </form>
+    <!-- 댓글 리스트 영역 -->
+    <div id="commentList">
+        <div th:each="comment : ${comments}" class="comment-box" th:attr="data-id=${comment.id}" th:id="'comment-'+${comment.id}">
+            <div class="comment-box"
+                 style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative;">
+                <p style="margin: 0 0 5px 0;">
+                    <strong th:text="${comment.nickname}" style="color: #333;"></strong>
+                </p>
+                <p th:text="${comment.content}" style="margin: 0 0 5px 0;"></p>
+                <button class="delete-comment-btn"
+                        th:data-id="${comment.id}"
+                        style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: red; cursor: pointer;">
+                    🗑 삭제
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div class="footer-space"></div>
 
     <script>
@@ -265,7 +310,7 @@
                         if (data.isFavorite) {
                             favoriteBtn.innerHTML = "☆";
                         } else {
-                            favoriteBtn.innerHTML = "★";
+                            favoriteBtn.innerHTML = "⭐";
                         }
                     })
                     .catch(error => {
@@ -274,7 +319,96 @@
             });
         });
     </script>
-</div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const commentForm = document.getElementById("commentForm");
+            const commentList = document.getElementById("commentList");
+
+            // ⭐ 댓글 등록
+            commentForm.addEventListener("submit", function (e) {
+                e.preventDefault();
+
+                const recipeId = document.getElementById("recipeId").value;
+                const userId = document.getElementById("userId").value;
+                const content = document.getElementById("commentContent").value;
+
+                fetch("/comments/add", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: new URLSearchParams({recipeId, userId, content})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const newComment = document.createElement("div");
+                        newComment.classList.add("comment-box");
+                        newComment.setAttribute("id", `comment-${data.id}`);
+                        newComment.innerHTML = `
+<div class="comment-box" data-id="${data.id}" id="comment-${data.id}">
+            <div class="comment-box"
+                 style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative;">
+                <p style="margin: 0 0 5px 0;">
+                    <strong style="color: #333;">${data.nickname}</strong>
+                </p>
+                <p style="margin: 0 0 5px 0;">${data.content}</p>
+                <button class="delete-comment-btn"
+                        data-id="${data.id}"
+                        style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: red; cursor: pointer;">
+                    🗑 삭제
+                </button>
+            </div>
+        </div>
+            `;
+                        commentList.appendChild(newComment);
+                        document.getElementById("commentContent").value = "";
+                    });
+            });
+
+            // ⭐ 댓글 삭제 + 수정 (이벤트 위임)
+            commentList.addEventListener("click", function (e) {
+                const target = e.target;
+                const commentId = target.getAttribute("data-id");
+
+                // 🔥 삭제 버튼
+                if (target.classList.contains("delete-comment-btn")) {
+
+                    fetch("/comments/delete/"+commentId, {
+                        method: "DELETE"
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                document.getElementById(`comment-${commentId}`).remove();
+                            } else {
+                                alert("삭제 실패");
+                            }
+                        });
+                }
+
+                // ✏ 수정 버튼
+                if (target.classList.contains("edit-comment-btn")) {
+                    const commentSpan = document.querySelector(`#comment-${commentId} .comment-content`);
+                    const currentContent = commentSpan.textContent;
+                    const newContent = prompt("댓글을 수정하세요:", currentContent);
+
+                    if (newContent && newContent !== currentContent) {
+                        fetch(`/comments/update/${commentId}`, {
+                            method: "PUT",
+                            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                            body: new URLSearchParams({content: newContent})
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    commentSpan.textContent = newContent;
+                                } else {
+                                    alert("수정 실패");
+                                }
+                            });
+                    }
+                }
+            });
+        });
+    </script>
+
+</div>
 </body>
 </html>
