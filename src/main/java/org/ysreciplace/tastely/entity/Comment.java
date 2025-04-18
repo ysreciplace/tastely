@@ -1,6 +1,7 @@
 package org.ysreciplace.tastely.entity;
 
 import lombok.*;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDateTime;
 
@@ -15,4 +16,7 @@ public class Comment {
     private Long userId;
     private String content;
     private LocalDateTime createAt;
+
+    public void setCreatedAt(LocalDateTime now) {
+    }
 }

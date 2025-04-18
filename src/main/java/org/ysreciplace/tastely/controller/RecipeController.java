@@ -23,6 +23,7 @@ import java.util.UUID;
 public class RecipeController {
 
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private RecipeRepository recipeRepository;
     private ReviewRepository reviewRepository;
     private FavoriteRepository favoriteRepository;
