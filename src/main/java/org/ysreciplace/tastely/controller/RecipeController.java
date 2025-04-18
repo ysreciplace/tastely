@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,8 +24,23 @@ import java.util.UUID;
 public class RecipeController {
 
     private final UserRepository userRepository;
-    private final RecipeRepository recipeRepository;
-    private final ReviewRepository reviewRepository;
+    private RecipeRepository recipeRepository;
+    private ReviewRepository reviewRepository;
+    private FavoriteRepository favoriteRepository;
+
+    @GetMapping("/history")
+    public String historyHandle(Model model) {
+        return "recipe/history";
+    }
+
+    @GetMapping("/search")
+    public String searchRecipeHandle(@RequestParam("keyword")String keyword, Model model) {
+        List<Recipe> recipes = recipeRepository.searchByKeyword(keyword);
+        model.addAttribute("recipes",recipes);
+        model.addAttribute("keyword",keyword);
+        return "recipe/search";  //레시피 찾기기능
+    }
+
 
     // ✅ 상세 페이지
     @GetMapping("/detail/{id}")
@@ -35,11 +51,13 @@ public class RecipeController {
         List<Review> reviews = reviewRepository.findByRecipeId(id);
         double averageRating = reviewRepository.findAverageRatingByRecipeId(id);
 
+        boolean isFavorite = favoriteRepository.exists((long)user.getId(), id);
+
         model.addAttribute("recipe", recipe);
         model.addAttribute("reviews", reviews);
         model.addAttribute("averageRating", averageRating);
         model.addAttribute("user", user);
-        model.addAttribute("currentUserId", 1L); // 임시 사용자 ID
+        model.addAttribute("isFavorite",isFavorite);
 
         return "recipe/detail"; // templates/recipe/detail.html
     }
@@ -82,13 +100,12 @@ public class RecipeController {
                     System.out.println(line);
                 }
             }
-
             int exitCode = process.waitFor();
             if (exitCode != 0) {
                 throw new RuntimeException("SCP failed with exit code " + exitCode);
             }
-
-            recipe.setThumbnail("http://54.180.114.141/uploads/" + savedFilename);
+            //4.썸네일 경로 DB에 저장
+            recipe.setThumbnail("http://54.180.114.141/uploads/" +  savedFilename);
             tempFile.delete();
         }
 
@@ -99,11 +116,11 @@ public class RecipeController {
             recipeRepository.ingredientSave(one);
         }
 
-        for (Step one : newRecipe.getSteps()) {
-            one.setRecipeId(recipe.getId());
+       for (Step one: newRecipe.getSteps() ) {
+            one.setRecipeId(newRecipe.getRecipe().getId());
+
             recipeRepository.stepSave(one);
         }
-
         return "redirect:/recipe/history";
     }
 

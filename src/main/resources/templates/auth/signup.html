@@ -41,7 +41,7 @@
         }
 
         .signup-container button {
-            background: #27ae60;
+            background: #e67e22; /* 주황색 */
             color: white;
             border: none;
             padding: 12px 20px;
@@ -49,11 +49,49 @@
             font-size: 16px;
             border-radius: 10px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .signup-container button:hover {
-            background: #1e8449;
+            background: #d35400; /* hover 시 진한 주황색 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .signup-container a img {
+            height: 40px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .signup-container a img:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .login-guide {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .login-guide a {
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .login-guide a:hover {
+            color: #007bff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -69,19 +107,19 @@
         <input type="password" name="confirmPassword" placeholder="비밀번호 확인" required />
         <button type="submit">회원가입</button>
     </form>
-</div>
 
-<div>
-    <a th:href="@{https://kauth.kakao.com/oauth/authorize
-            (client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code' )}">
-        <img th:src="@{/icons/kakao_login.png}"/>
-    </a>
-</div>
-<div>
-    <a th:href="@{https://nid.naver.com/oauth2.0/authorize(response_type='code', client_id=${naverClientId},
-                                    redirect_uri=${naverRedirectUri}, state='codenova')}">
-        <img th:src="@{/icons/naver_login.png}"/>
-    </a>
+    <div class="social-login">
+        <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
+            <img th:src="@{/icons/kakao_login.png}" />
+        </a>
+        <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
+            <img th:src="@{/icons/naver_login.png}" />
+        </a>
+    </div>
+
+    <div class="login-guide">
+        이미 계정이 있으신가요? <a href="/auth/login">로그인</a>
+    </div>
 </div>
 
 </body>

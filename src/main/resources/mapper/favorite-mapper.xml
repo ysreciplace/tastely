@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ysreciplace.tastely.repository.FavoriteRepository">
+    <insert id="save">
+        insert into favorites (user_id, recipe_id)
+        values (#{userId}, #{recipeId})
+    </insert>
+
+    <delete id="delete">
+        delete from favorites where user_id = #{userId} and recipe_id = #{recipeId}
+    </delete>
+
+    <select id="exists" resultType="boolean">
+        select count(*) > 0
+        from favorites
+        where user_id = #{userId} and recipe_id = #{recipeId}
+    </select>
+
+    <select id="findFavoritesByUserId" resultType="recipe">
+        select r.*
+        from recipes r
+        join favorites f on r.id = f.recipe_id
+        where f.user_id = #{userId}
+    </select>
+</mapper>

@@ -52,8 +52,34 @@
             transition: background 0.3s ease;
         }
 
-        .login-container button:hover {
-            background: #d35400;
+        .login-container button:hover,
+        .login-container a img:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        .login-container a img {
+            height: 40px;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+        .signup-guide {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .signup-guide a {
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .signup-guide a:hover {
+            color: #007bff;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -68,17 +94,16 @@
 
     </form>
 
-    <div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
         <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/kakao_login.png}"/>
+            <img th:src="@{/icons/kakao_login.png}" style="height: 40px;" />
+        </a>
+        <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
+            <img th:src="@{/icons/naver_login.png}" style="height: 40px;" />
         </a>
     </div>
-    <div>
-        <a th:href="@{https://nid.naver.com/oauth2.0/authorize
-        (client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code' )}">
-            <img th:src="@{/icons/naver_login.png}"/>
-        </a>
-
+    <div class="signup-guide">
+        아직 계정이 없으신가요? <a href="/auth/signup">회원가입</a>
     </div>
 </div>
 

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title th:text="${recipe.title}">레시피 상세</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
     <style>
         * { box-sizing: border-box; }
         body {
@@ -155,10 +157,29 @@
             border-color: #e55a5a; /* 호버 시 테두리 색상 */
         }
 
+
         @media (max-width: 768px) {
             .info-box { flex-direction: column; }
             .step { flex-direction: column; }
             .step img { width: 100%; }
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .favorite-btn {
+            background: none; /* 배경 없애기 */
+            border: none; /* 테두리 없애기 */
+            font-size: 32px; /* 아이콘 크기 키우기 */
+            cursor: pointer;
+            padding: 0;
+            margin-left: 10px; /* 원하는 위치 조정용 */
+            transition: transform 0.2s ease;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1); /* 호버 시 살짝 확대 효과 */
         }
     </style>
 </head>
@@ -191,7 +212,6 @@
         <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${recipe.userId}"></span></div>
         <div class="info-item"><span class="info-label">🗓 작성일:</span> <span th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
     </div>
-
     <section>
         <h2>레시피 설명</h2>
         <p th:text="${recipe.description}"></p>
@@ -216,6 +236,36 @@
             </div>
         </div>
     </section>
+    <div class="footer-space"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const favoriteBtn = document.getElementById("favoriteBtn");
+            favoriteBtn.addEventListener("click", function () {
+                const recipeId = this.getAttribute("data-recipe-id");
+
+                fetch("/favorite/toggle", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: "recipeId=" + recipeId
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 응답에 따라 버튼 텍스트 변경
+                        if (data.isFavorite) {
+                            favoriteBtn.innerHTML = "☆";
+                        } else {
+                            favoriteBtn.innerHTML = "⭐";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("즐겨찾기 요청 실패:", error);
+                    });
+            });
+        });
+    </script>
 </div>
 
 </body>

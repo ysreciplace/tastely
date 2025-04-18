@@ -17,7 +17,6 @@ public class ReviewController {
         reviewRepository.save(review);
         return "redirect:/recipe/detail/" + review.getRecipeId();
     }
-
     @PostMapping("/update")
     public String updateReviewHandle(@ModelAttribute Review review) {
         reviewRepository.update(review);

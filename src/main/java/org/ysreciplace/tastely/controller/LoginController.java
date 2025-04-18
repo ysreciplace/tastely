@@ -60,7 +60,7 @@ public class LoginController {
             return "redirect:/auth/login";
         } else {
             session.setAttribute("user", user);
-            return "redirect:/home";
+            return "redirect:/ranking";
         }
     }
 
@@ -137,7 +137,7 @@ public class LoginController {
             session.setAttribute("user", user);
         }
         log.info("jwt: sub={}, nickname={}", sub, nickname);
-        return "redirect:/home";
+        return "redirect:/ranking";
     }
 
 
@@ -176,7 +176,7 @@ public class LoginController {
         }else {
             session.setAttribute("user", found);
         }
-        return "redirect:/home";
+        return "redirect:/ranking";
     }
 
 }
