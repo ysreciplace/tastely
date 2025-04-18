@@ -18,8 +18,8 @@
     <select id="findByProviderAndProviderId" resultType="user">
         select * from users where provider=#{provider} and provider_id=#{providerId}
     </select>
-    
-    <select id="findById" resultType="user">
+
+    <select id="findByUserId" resultType="user">
         select * from users where id=#{userId}
     </select>
 

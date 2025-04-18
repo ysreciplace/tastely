@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/comments")
 @AllArgsConstructor
 public class CommentController {
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
     private CommentRepository commentRepository;
 
     @PostMapping("/add")
