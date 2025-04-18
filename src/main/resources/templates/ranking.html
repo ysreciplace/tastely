@@ -2,97 +2,124 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>인기 레시피 랭킹</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <title>레시피 랭킹</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #fdf6f0;
-            color: #2c2c2c;
+            background-color: #fafafa;
+            color: #222;
         }
 
         nav {
-            background-color: #800020;
-            padding: 16px 0;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background-color: #fff;
+            padding: 24px 40px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #5e001f;
         }
 
         nav a {
-            color: #fdf6f0;
-            margin: 0 20px;
+            margin-left: 30px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            transition: color 0.3s ease;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #d4af37;
+        nav a:hover:not(.logo) {
+            color: #ff6f61;
         }
 
         .container {
             max-width: 1200px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: white;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            margin: 60px auto;
+            padding: 0 20px;
         }
 
-        h2 {
-            margin: 40px 0 20px;
-            color: #800020;
+        h2.section-title {
+            font-family: 'Playfair Display', serif;
             font-size: 26px;
-            border-left: 6px solid #800020;
+            margin-bottom: 30px;
+            color: #5e001f;
+            border-left: 6px solid #5e001f;
             padding-left: 15px;
         }
 
+        /* 기본 레시피 카드 그리드 */
         .recipe-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-between;
+            display: grid;
+            gap: 30px;
+            margin-bottom: 60px;
         }
 
+        /* 초간단 레시피는 4개씩 표시 */
+        .quick-recipe-list {
+            grid-template-columns: repeat(4, 1fr); /* 4개씩 표시 */
+        }
+
+        /* 인기 레시피는 5개씩 표시 */
+        .popular-recipe-list {
+            grid-template-columns: repeat(5, 1fr); /* 5개씩 표시 */
+        }
+
+        /* 신규 레시피는 5개씩 표시 */
+        .new-recipe-list {
+            grid-template-columns: repeat(5, 1fr); /* 5개씩 표시 */
+        }
+
+        /* 카드 기본 스타일 */
         .card {
-            width: calc(20% - 20px);
+            background-color: #fff;
             border-radius: 12px;
             overflow: hidden;
-            background: #ffffff;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
         }
 
         .card img {
             width: 100%;
-            height: 160px;
+            height: 180px;
             object-fit: cover;
         }
 
         .card-content {
-            padding: 16px;
+            padding: 20px;
         }
 
         .card-content h3 {
-            margin: 0 0 8px;
-            font-size: 18px;
-            color: #2c2c2c;
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #222;
+            font-weight: 700;
         }
 
         .card-content p {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.4;
-            height: 40px;
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            height: 44px;
             overflow: hidden;
         }
 
@@ -100,6 +127,50 @@
             text-decoration: none;
             color: inherit;
             display: block;
+        }
+
+        /* 화면 크기가 1200px 이하일 때 4개씩 표시 */
+        @media (max-width: 1200px) {
+            .quick-recipe-list {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .popular-recipe-list, .new-recipe-list {
+                grid-template-columns: repeat(4, 1fr); /* 4개씩 표시 */
+            }
+        }
+
+        /* 화면 크기가 992px 이하일 때 3개씩 표시 */
+        @media (max-width: 992px) {
+            .quick-recipe-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .popular-recipe-list, .new-recipe-list {
+                grid-template-columns: repeat(3, 1fr); /* 3개씩 표시 */
+            }
+        }
+
+        /* 화면 크기가 768px 이하일 때 2개씩 표시 */
+        @media (max-width: 768px) {
+            .quick-recipe-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .popular-recipe-list, .new-recipe-list {
+                grid-template-columns: repeat(2, 1fr); /* 2개씩 표시 */
+            }
+        }
+
+        /* 화면 크기가 480px 이하일 때 1개씩 표시 */
+        @media (max-width: 480px) {
+            .quick-recipe-list {
+                grid-template-columns: 1fr;
+            }
+
+            .popular-recipe-list, .new-recipe-list {
+                grid-template-columns: 1fr; /* 1개씩 표시 */
+            }
         }
     </style>
 </head>
@@ -119,8 +190,8 @@
 </nav>
 
 <div class="container">
-    <h2>🌟 초간단 레시피</h2>
-    <div class="recipe-list">
+    <h2 class="section-title">🌟 초간단 레시피</h2>
+    <div class="recipe-list quick-recipe-list"> <!-- 초간단 레시피 -->
         <div class="card" th:each="recipe : ${quickRecipes}">
             <a th:href="@{/recipe/view(id=${recipe.id})}" class="recipe-link">
                 <img th:src="@{${recipe.thumbnail}}" alt="추천 레시피 이미지">
@@ -132,8 +203,8 @@
         </div>
     </div>
 
-    <h2>🔥 인기 레시피</h2>
-    <div class="recipe-list">
+    <h2 class="section-title">🔥 인기 레시피</h2>
+    <div class="recipe-list popular-recipe-list"> <!-- 인기 레시피 -->
         <div class="card" th:each="recipe : ${popularRecipes}">
             <a th:href="@{/recipe/view(id=${recipe.id})}" class="recipe-link">
                 <img th:src="@{${recipe.thumbnail}}" alt="인기 레시피 이미지">
@@ -145,8 +216,8 @@
         </div>
     </div>
 
-    <h2>🆕 신규 레시피</h2>
-    <div class="recipe-list">
+    <h2 class="section-title">🆕 신규 레시피</h2>
+    <div class="recipe-list new-recipe-list"> <!-- 신규 레시피 -->
         <div class="card" th:each="recipe : ${newRecipes}">
             <a th:href="@{/recipe/view(id=${recipe.id})}" class="recipe-link">
                 <img th:src="@{${recipe.thumbnail}}" alt="신규 레시피 이미지">
@@ -161,8 +232,3 @@
 
 </body>
 </html>
-
-
-
-
-

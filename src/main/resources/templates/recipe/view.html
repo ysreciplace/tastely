@@ -3,64 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${recipe.title}">레시피 상세</title>
-    <!-- head 안에 이거 추가 -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css">
-
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-
+        * { box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
-            background-color: #fdf6f0;
-            color: #2c2c2c;
+            background: #fafafa;
+            font-family: 'Roboto', sans-serif;
+            color: #222;
         }
 
-        /* nav 전용 폰트 변경 */
         nav {
-            font-family: 'Pretendard Variable', sans-serif;
-            background-color: #800020;
-            padding: 16px 0;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            background-color: #fff;
+            padding: 24px 40px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #5e001f;
+        }
 
         nav a {
-            color: #fdf6f0;
-            margin: 0 20px;
-            text-decoration: none !important;;
-            font-weight: 600;
-            font-size: 16px;
-            transition: color 0.3s ease;
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        nav a:hover {
-            color: #d4af37;
+        nav a:hover:not(.logo) {
+            color: #ff6f61;
         }
 
         .container {
-            max-width: 1000px;
-            margin: 50px auto;
+            max-width: 900px;
+            margin: 60px auto;
+            background: #fff;
+            border-radius: 12px;
             padding: 40px;
-            background-color: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
         }
 
         .title {
+            font-family: 'Playfair Display', serif;
             font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #800020;
-            border-left: 6px solid #800020;
+            color: #222;
+            margin-bottom: 24px;
+            border-left: 6px solid #5e001f;
             padding-left: 14px;
         }
 
@@ -68,12 +66,12 @@
             width: 100%;
             max-height: 400px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.07);
             margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
         }
 
-        .info-grid {
+        .info-box {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -81,13 +79,14 @@
         }
 
         .info-item {
-            flex: 0 0 48%;
-            font-size: 16px;
+            flex: 0 0 45%;
+            font-size: 15px;
+            color: #555;
         }
 
         .info-label {
-            font-weight: bold;
-            margin-right: 8px;
+            font-weight: 600;
+            color: #000;
         }
 
         section {
@@ -95,11 +94,12 @@
         }
 
         h2 {
-            font-size: 24px;
-            margin-bottom: 16px;
-            border-left: 6px solid #ff6b6b;
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #222;
+            border-left: 5px solid #ff6f61;
             padding-left: 12px;
-            color: #333;
+            margin-bottom: 20px;
         }
 
         ul {
@@ -108,26 +108,24 @@
         }
 
         .ingredient-item {
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 8px;
+            color: #444;
         }
 
         .step {
             margin-bottom: 40px;
             display: flex;
             gap: 20px;
-            align-items: flex-start;
-            background: #fff7f5;
+            background: #fff5f3;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
         }
 
         .step img {
-            width: 220px;
-            height: auto;
+            width: 200px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
         }
 
         .step-desc {
@@ -136,31 +134,34 @@
 
         .step-number {
             font-weight: bold;
-            font-size: 18px;
-            color: #800020;
+            font-size: 16px;
             margin-bottom: 6px;
-        }
-
-        .footer-space {
-            margin-bottom: 80px;
+            color: #d60036;
         }
 
         .review-btn {
-            display: inline-block;
-            margin-left: auto;
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 10px 18px;
+            float: right;
+            background-color: transparent; /* 기본 배경은 투명 */
+            color: #ff6f61; /* 기본 텍스트 색상 */
+            border: 2px solid #ff6f61; /* 기본 테두리 색상 */
+            padding: 10px 16px;
             border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
-            transition: 0.3s ease;
-            float: right;
+            transition: all 0.3s ease; /* 부드러운 트랜지션 효과 */
         }
 
         .review-btn:hover {
-            background-color: #e55a5a;
+            background-color: #ff6f61; /* 호버 시 배경색 */
+            color: white; /* 호버 시 텍스트 색상 */
+            border-color: #e55a5a; /* 호버 시 테두리 색상 */
+        }
+
+
+        @media (max-width: 768px) {
+            .info-box { flex-direction: column; }
+            .step { flex-direction: column; }
+            .step img { width: 100%; }
         }
 
         a {
@@ -180,52 +181,45 @@
         .favorite-btn:hover {
             transform: scale(1); /* 호버 시 살짝 확대 효과 */
         }
-
     </style>
 </head>
 <body>
 
+<!-- 🧭 네비게이션 -->
 <nav>
-    <a href="/recipes">🍽 레시피</a>
-    <a href="/community">💬 커뮤니티</a>
-    <a href="/mypage">👤 마이페이지</a>
-    <a href="/logout">🚪 로그아웃</a>
+    <a href="/" class="logo">Recipe Journal</a> <!-- ✅ 로고 클릭 시 인덱스로 이동 -->
+    <div>
+        <a href="/recipe/write" style="margin-left: 30px; color: #5e001f; font-weight: bold;">레시피 등록</a> <!-- 👈 이거 추가 -->
+        <a href="/community">커뮤니티</a>
+        <a href="/mypage">마이페이지</a>
+        <a href="/logout">로그아웃</a>
+    </div>
 </nav>
 
+
+<!-- 📄 상세 콘텐츠 -->
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px">
         <div style="display: flex; align-items: center;">
-            <div class="title" style="margin: 0;" th:text="${recipe.title}">레시피 제목</div>
-                <button class="favorite-btn"
-                        id="favoriteBtn"
-                        th:data-recipe-id="${recipe.id}"
-                        th:text="${isFavorite} ? '⭐' : '☆'">
-                </button>
+            <div class="title" th:text="${recipe.title}" style="color: #5e001f; margin: 0">레시피 제목</div>
+            <button class="favorite-btn"
+                    id="favoriteBtn" style="color: goldenrod"
+                    th:data-recipe-id="${recipe.id}"
+                    th:text="${isFavorite} ? '★' : '☆'">
+            </button>
+
         </div>
-        <a class="review-btn" th:href="@{/recipe/detail/{id}(id=${recipe.id})}">리뷰 등록</a>
+        <button class="review-btn">리뷰 등록</button>
     </div>
 
-    <img class="thumbnail" th:src="@{${recipe.thumbnail}}" th:method="post" alt="레시피 이미지"/>
+    <img class="thumbnail" th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
 
-    <div class="info-grid">
-        <div class="info-item">
-            <span class="info-label">⏱ 요리 시간:</span>
-            <span th:text="${recipe.cookTime} + ' 분'"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">📈 난이도:</span>
-            <span th:text="${recipe.difficulty}"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">👤 작성자 ID:</span>
-            <span th:text="${user.nickname}"></span>
-        </div>
-        <div class="info-item">
-            <span class="info-label">🗓 작성일:</span>
-            <span th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span>
-        </div>
+    <div class="info-box">
+        <div class="info-item"><span class="info-label">⏱ 요리 시간:</span> <span th:text="${recipe.cookTime} + ' 분'"></span></div>
+        <div class="info-item"><span class="info-label">📈 난이도:</span> <span th:text="${recipe.difficulty}"></span></div>
+        <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${recipe.userId}"></span></div>
+        <div class="info-item"><span class="info-label">🗓 작성일:</span> <span th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
     </div>
-
     <section>
         <h2>레시피 설명</h2>
         <p th:text="${recipe.description}"></p>
@@ -251,37 +245,94 @@
         </div>
     </section>
 
-    <div class="footer-space"></div>
+    <!-- 댓글 입력 폼 -->
+    <form id="commentForm" class="comment-form" style="margin-top: 30px;">
+        <input type="hidden" id="recipeId" th:value="${recipe.id}" />
+        <input type="hidden" id="userId" th:value="${user.id}" />
+        <textarea id="commentContent" placeholder="댓글을 입력하세요." style="width: 100%; height: 60px; border-radius: 6px; padding: 8px;"></textarea>
+        <button type="submit" style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px;">등록</button>
+    </form>
+    <!-- 댓글 리스트 영역 -->
+    <div id="commentList">
+        <div th:each="comment : ${comments}" class="comment-box" th:attr="data-id=${comment.id}">
+                <p><strong th:text="${comment.nickname}"></strong>: <span th:text="${comment.content}"></span></p>
+                </div>
+            </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const favoriteBtn = document.getElementById("favoriteBtn");
-            favoriteBtn.addEventListener("click", function () {
-                const recipeId = this.getAttribute("data-recipe-id");
+            <div class="footer-space"></div>
 
-                fetch("/favorite/toggle", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
-                    },
-                    body: "recipeId=" + recipeId
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        // 응답에 따라 버튼 텍스트 변경
-                        if (data.isFavorite) {
-                            favoriteBtn.innerHTML = "☆";
-                        } else {
-                            favoriteBtn.innerHTML = "⭐";
-                        }
-                    })
-                    .catch(error => {
-                        console.error("즐겨찾기 요청 실패:", error);
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const favoriteBtn = document.getElementById("favoriteBtn");
+                    favoriteBtn.addEventListener("click", function () {
+                        const recipeId = this.getAttribute("data-recipe-id");
+
+                        fetch("/favorite/toggle", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: "recipeId=" + recipeId
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // 응답에 따라 버튼 텍스트 변경
+                                if (data.isFavorite) {
+                                    favoriteBtn.innerHTML = "☆";
+                                } else {
+                                    favoriteBtn.innerHTML = "⭐";
+                                }
+                            })
+                            .catch(error => {
+                                console.error("즐겨찾기 요청 실패:", error);
+                            });
                     });
-            });
-        });
-    </script>
+                });
+            </script>
 
-</div>
-</body>
-</html>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const commentForm = document.getElementById("commentForm");
+                    commentForm.addEventListener("submit", function (e) {
+                        e.preventDefault(); // 기본 제출 막기
+
+                        const recipeId = document.getElementById("recipeId").value;
+                        const userId = document.getElementById("userId").value;
+                        const content = document.getElementById("commentContent").value;
+
+                        fetch("/comments/add", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: new URLSearchParams({
+                                recipeId: recipeId,
+                                userId: userId,
+                                content: content
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                // 댓글 목록에 추가
+                                const commentList = document.getElementById("commentList");
+
+                                const newComment = document.createElement("div");
+                                newComment.classList.add("comment-box");
+                                newComment.innerHTML = `
+                        <p><strong>${data.nickname}</strong>: ${data.content}</p>
+                        <form action="/comments/delete" method="post">
+                            <input type="hidden" name="id" value="${data.id}" />
+                            <button type="submit" style="color:red;">🗑 삭제</button>
+                        </form>
+                    `;
+                                commentList.appendChild(newComment);
+                                document.getElementById("commentContent").value = ""; // 폼 초기화
+                            });
+                    });
+                });
+            </script>
+
+        </div>
+        </body>
+        </html>

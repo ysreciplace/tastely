@@ -18,13 +18,17 @@
     <select id="findByProviderAndProviderId" resultType="user">
         select * from users where provider=#{provider} and provider_id=#{providerId}
     </select>
+    
+    <select id="findById" resultType="user">
+        select * from users where id=#{userId}
+    </select>
 
     <update id="updatePasswordByEmail">
-        update user set password=#{password} where email=#{email}
+        update users set password=#{password} where email=#{email}
     </update>
 
     <update id="updateUserVerified">
-        update user set verified='T' where email=#{email}
+        update users set verified='T' where email=#{email}
     </update>
 
     <select id="findById" resultType="user" >

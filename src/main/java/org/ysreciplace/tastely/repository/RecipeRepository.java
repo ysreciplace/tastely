@@ -15,5 +15,11 @@ public interface RecipeRepository {
     public int stepSave(Step step);
     public Recipe findById(@Param("id") Long id);
     public List<Recipe> searchByKeyword(@Param("keyword")String keyword);
+
     List<Recipe> findByUserId(@Param("userId") Long userId);
+
+    List<Recipe> findAll();
+
+    List<Recipe> findByTitleContain(@Param("keyword") String keyword);
+
 }
