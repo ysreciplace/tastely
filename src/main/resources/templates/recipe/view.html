@@ -199,8 +199,16 @@
 
 <!-- 📄 상세 콘텐츠 -->
 <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div class="title" th:text="${recipe.title}" style="color: #5e001f;">레시피 제목</div>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px">
+        <div style="display: flex; align-items: center;">
+            <div class="title" th:text="${recipe.title}" style="color: #5e001f; margin: 0">레시피 제목</div>
+            <button class="favorite-btn"
+                    id="favoriteBtn" style="color: goldenrod"
+                    th:data-recipe-id="${recipe.id}"
+                    th:text="${isFavorite} ? '★' : '☆'">
+            </button>
+
+        </div>
         <button class="review-btn">리뷰 등록</button>
     </div>
 
@@ -257,7 +265,7 @@
                         if (data.isFavorite) {
                             favoriteBtn.innerHTML = "☆";
                         } else {
-                            favoriteBtn.innerHTML = "⭐";
+                            favoriteBtn.innerHTML = "★";
                         }
                     })
                     .catch(error => {
