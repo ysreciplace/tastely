@@ -70,44 +70,9 @@ public class RecipeController {
                                     Model model) throws IOException, InterruptedException {
 
         Recipe recipe = newRecipe.getRecipe();
-
         if (!thumbnailFile.isEmpty()) {
-            String originalFilename = thumbnailFile.getOriginalFilename();
-            String savedFilename = UUID.randomUUID() + "_" + originalFilename;
-
-            File tempFile = File.createTempFile("upload-", "-" + savedFilename);
-            thumbnailFile.transferTo(tempFile);
-
-            String privateKeyPath = "C:\\awskey\\dev-kms-key.pem";
-            String user = "ec2-user";
-            String host = "54.180.114.141";
-            String remoteDir = "/home/ec2-user/uploads";
-
-            String[] scpCommand = {
-                    "scp",
-                    "-i", privateKeyPath,
-                    "-o", "StrictHostKeyChecking=no",
-                    tempFile.getAbsolutePath(),
-                    user + "@" + host + ":" + remoteDir + "/" + savedFilename
-            };
-
-            ProcessBuilder pb = new ProcessBuilder(scpCommand);
-            pb.redirectErrorStream(true);
-            Process process = pb.start();
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
-                }
-            }
-            int exitCode = process.waitFor();
-            if (exitCode != 0) {
-                throw new RuntimeException("SCP failed with exit code " + exitCode);
-            }
-            //4.썸네일 경로 DB에 저장
-            recipe.setThumbnail("http://54.180.114.141/uploads/" +  savedFilename);
-            tempFile.delete();
+            String savedFilename = uploadToServer(thumbnailFile);
+            recipe.setThumbnail("http://54.180.114.141/uploads/" + savedFilename);
         }
 
         recipeRepository.save(recipe);
@@ -119,10 +84,47 @@ public class RecipeController {
 
        for (Step one: newRecipe.getSteps() ) {
             one.setRecipeId(newRecipe.getRecipe().getId());
+           MultipartFile imageFile = one.getImageFile();
+           if (imageFile !=null && !imageFile.isEmpty()) {
+               String savedFilename = uploadToServer(imageFile);
+               one.setImage("http://54.180.114.141/uploads/" + savedFilename);
+           }
 
             recipeRepository.stepSave(one);
         }
-        return "redirect:/recipe/history";
+        return "redirect:/recipe/view?id=" + recipe.getId();
+    }
+
+    private String uploadToServer(MultipartFile file) throws IOException, InterruptedException {
+        String originalFilename = file.getOriginalFilename();
+        String savedFilename = UUID.randomUUID() + "_" + originalFilename;
+        File tempFile = File.createTempFile("upload-", "-" + savedFilename);
+        file.transferTo(tempFile);
+
+        String privateKeyPath = "C:\\awskey\\dev-kms-key.pem";
+        String user = "ec2-user";
+        String host = "54.180.114.141";
+        String remoteDir = "/home/ec2-user/uploads";
+        String[] scpCommand = {
+                "scp","-i",privateKeyPath,"-o","StrictHostKeyChecking=no",tempFile.getAbsolutePath(),user+"@"+host+":"+remoteDir+"/"+savedFilename
+        };
+        ProcessBuilder pb = new ProcessBuilder(scpCommand);
+        pb.redirectErrorStream(true);
+        Process process = pb.start();
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
+
+        int exitCode = process.waitFor();
+        if (exitCode != 0) {
+            throw new RuntimeException("SCP failed with exit code " + exitCode);
+        }
+        tempFile.delete();
+        return savedFilename;
     }
 
     // ✅ 전체 레시피 페이지 (recipe.html)

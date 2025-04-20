@@ -202,7 +202,8 @@
     <a href="/" class="logo">Recipe Journal</a> <!-- ✅ 로고 클릭 시 인덱스로 이동 -->
     <div>
 
-        <a href="/recipe/history" style="margin-left: 30px; color: #5e001f; font-weight: bold;">레시피 등록</a> <!-- 👈 이거 추가 -->
+        <a href="/recipe/history" style="margin-left: 30px; color: #5e001f; font-weight: bold;">레시피 등록</a>
+        <!-- 👈 이거 추가 -->
         <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
         <a href="/mypage">마이페이지</a>
         <a href="/logout">로그아웃</a>
@@ -222,7 +223,9 @@
             </button>
 
         </div>
-        <a th:href="@{/recipe/detail/{id}(id=${recipe.id})}"><button class="review-btn">리뷰 등록</button></a>
+        <a th:href="@{/recipe/detail/{id}(id=${recipe.id})}">
+            <button class="review-btn">리뷰 등록</button>
+        </a>
     </div>
 
     <img class="thumbnail" th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
@@ -231,7 +234,7 @@
         <div class="info-item"><span class="info-label">⏱ 요리 시간:</span> <span
                 th:text="${recipe.cookTime} + ' 분'"></span></div>
         <div class="info-item"><span class="info-label">📈 난이도:</span> <span th:text="${recipe.difficulty}"></span></div>
-        <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${recipe.userId}"></span></div>
+        <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${user.nickname}"></span></div>
         <div class="info-item"><span class="info-label">🗓 작성일:</span> <span
                 th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
     </div>
@@ -273,8 +276,10 @@
     </form>
     <!-- 댓글 리스트 영역 -->
     <div id="commentList">
-        <div th:each="comment : ${comments}" class="comment-box" th:attr="data-id=${comment.id}" th:id="'comment-'+${comment.id}">
-            <div class="comment-box"
+        <div th:each="comment,stat : ${comments}" class="comment-box" th:attr="data-id=${comment.id}"
+             th:id="'comment-'+${comment.id}"
+             th:style="${stat.index < 3} ? '' : 'display: none;'">
+            <div class="comment-box-style"
                  style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative;">
                 <p style="margin: 0 0 5px 0;">
                     <strong th:text="${comment.nickname}" style="color: #333;"></strong>
@@ -286,6 +291,16 @@
                     🗑 삭제
                 </button>
             </div>
+        </div>
+
+        <!-- 전체보기 버튼 추가 -->
+        <div th:if="${comments.size() > 3}">
+            <button id="showAllComments" style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px;">
+                전체보기
+            </button>
+            <button id="hideComments" style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px; display: none;">
+                숨기기
+            </button>
         </div>
     </div>
 
@@ -372,7 +387,7 @@
                 // 🔥 삭제 버튼
                 if (target.classList.contains("delete-comment-btn")) {
 
-                    fetch("/comments/delete/"+commentId, {
+                    fetch("/comments/delete/" + commentId, {
                         method: "DELETE"
                     })
                         .then(response => {
@@ -409,6 +424,34 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const showAllCommentsBtn = document.getElementById("showAllComments");
+            const hideCommentsBtn = document.getElementById("hideComments");
+
+            if (showAllCommentsBtn) {
+                showAllCommentsBtn.addEventListener("click", function () {
+                    const hiddenComments = document.querySelectorAll('#commentList .comment-box[style*="display: none"]');
+                    hiddenComments.forEach(comment => comment.style.display = "block");
+                    showAllCommentsBtn.style.display = 'none';
+                    hideCommentsBtn.style.display = 'inline-block';
+                });
+            }
+
+            if (hideCommentsBtn) {
+                hideCommentsBtn.addEventListener("click", function () {
+                    const allComments = document.querySelectorAll('#commentList .comment-box');
+                    allComments.forEach((comment, index) => {
+                        if (index >= 3) {
+                            comment.style.display = "none";
+                        }
+                    });
+                    showAllCommentsBtn.style.display = 'inline-block';
+                    hideCommentsBtn.style.display = 'none';
+                });
+            }
+        });
+    </script>
 </div>
 </body>
 </html>
