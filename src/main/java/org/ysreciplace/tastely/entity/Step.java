@@ -1,6 +1,7 @@
 package org.ysreciplace.tastely.entity;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -13,4 +14,5 @@ public class Step {
     private int stepNumber;
     private String description;
     private String image;
+    private MultipartFile imageFile;
 }

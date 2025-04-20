@@ -21,5 +21,11 @@
     <select id="findAverageRatingByRecipeId" resultType="double">
         select ifnull(AVG(rating), 0) from reviews where recipe_id = #{recipeId}
     </select>
-
+    <select id="findPageByRecipeId" resultType="review">
+        select *
+        from reviews
+        where recipe_id =#{recipeId}
+        order by create_at desc
+        limit #{limit} offset #{offset}
+    </select>
 </mapper>
