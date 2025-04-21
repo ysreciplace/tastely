@@ -22,4 +22,7 @@ public interface RecipeRepository {
 
     List<Recipe> findByTitleContain(@Param("keyword") String keyword);
 
+    List<Recipe> findFavoriteByUserId(@Param("userId") Long userId);
+
+
 }

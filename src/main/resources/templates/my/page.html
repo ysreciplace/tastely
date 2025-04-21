@@ -76,8 +76,13 @@
 
         .recipe-list {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
+        }
+
+        .recipe-link {
+            text-decoration: none;
+            color: inherit;
         }
 
         .recipe-card {
@@ -85,32 +90,77 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             overflow: hidden;
-            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
         }
 
         .recipe-card img {
             width: 100%;
-            height: 160px;
+            height: 140px;
             object-fit: cover;
         }
 
-        .recipe-card h4 {
-            margin: 10px 0 5px;
-            font-size: 16px;
+        .card-content {
+            padding: 10px;
         }
 
-        .recipe-card p {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 10px;
+
+        .card-content h4 {
+            margin: 5px 0;
+            font-size: 15px;
+            font-weight: bold;
         }
+
+        .card-content p {
+            font-size: 13px;
+            color: #888;
+        }
+
+        nav {
+            background-color: #fff;
+            padding: 24px 40px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #5e001f;
+        }
+
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover:not(.logo) {
+            color: #ff6f61;
+        }
+
     </style>
 </head>
 <body>
+<nav>
+    <a href="/ranking" class="logo">Recipe Journal</a>
+    <div >
+
+    </div>
+
+</nav>
 <div class="mypage-wrapper">
     <!-- 프로필 섹션 -->
     <div class="profile-section">
-        <img class="profile-img" th:src="${user.profileImage}" alt="프로필 이미지">
+        <img class="profile-img" th:src="@{/images/default-profile.png}" alt="프로필 이미지">
         <div class="profile-info">
             <div><strong th:text="${user.nickname}"></strong> 님</div>
             <div th:if="${user.provider=='LOCAL'}">
@@ -130,18 +180,22 @@
     <div class="content-section">
         <!-- 상단 메뉴 -->
         <div class="menu-bar">
-            <a href="/page" class="active">내 레시피</a>
-            <a href="/mypage/favorites">내 즐겨찾기</a>
+            <a th:href="@{/page(tab='recipe')}" th:classappend="${tab} == 'recipe' ? 'active'">내 레시피</a>
+            <a th:href="@{/page(tab='favorite')}" th:classappend="${tab} == 'favorite' ? 'active'">내 즐겨찾기</a>
             <a href="/auth/logout">로그아웃</a>
         </div>
 
         <!-- 레시피 목록 -->
         <div class="recipe-list">
-            <div class="recipe-card" th:each="recipe : ${myRecipes}">
-                <img th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
-                <h4 th:text="${recipe.title}">레시피 제목</h4>
-                <p th:text="${recipe.description}">간단한 설명</p>
-            </div>
+            <a th:href="@{/recipe/view(id=${recipe.id})}" th:each="recipe : ${myRecipes}" class="recipe-link">
+                <div class="recipe-card">
+                    <img th:src="@{${recipe.thumbnail}}" alt="레시피 이미지">
+                    <div class="card-content">
+                        <h4 th:text="${recipe.title}">레시피 제목</h4>
+                        <p th:text="${recipe.description}">간단한 설명</p>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>

@@ -41,4 +41,12 @@
         where title like concat('%', #{keyword}, '%')
           or description like concat('%', #{keyword}, '%')
     </select>
- </mapper>
+
+    <select id="findFavoriteByUserId" resultType="recipe">
+        SELECT r.*
+        FROM recipes r
+        JOIN favorites f ON r.id = f.recipe_id
+        WHERE f.user_id = #{userId}
+    </select>
+
+</mapper>
