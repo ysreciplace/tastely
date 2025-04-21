@@ -182,14 +182,15 @@
     <div th:if="${found == true}">
         <a href="/recipe/page">레시피</a>
         <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
-        <a th:href="@{/page}">👤 마이페이지</a>
-        <a th:href="@{/auth/logout}">🚪 로그아웃</a>
+        <a th:href="@{/page}">마이페이지</a>
+        <a th:href="@{/auth/logout}">로그아웃</a>
     </div>
+
     <div th:if="${found == false}">
-         <a href="/recipe/page">레시피</a>
-         <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
-        <a th:href="@{/auth/login}">👤 로그인</a>
-     </div>
+        <a href="/recipe/page">레시피</a>
+        <a href="/community" onclick="alert('차후 추가될 서비스입니다'); event.preventDefault();">커뮤니티</a>
+        <a th:href="@{/auth/login}">로그인</a>
+    </div>
 </nav>
 
 <div class="container">

@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>로그인 | Tastely</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
             background: url('/images/food.jpg') no-repeat center center fixed;
             background-size: cover;
-            font-family: 'Noto Sans KR', sans-serif;
-            color: #222;
+            font-family: 'Roboto', sans-serif;
+            color: #1e1e1e;
         }
 
         .login-container {
@@ -19,119 +20,172 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.96);
-            padding: 48px 40px;
-            border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 380px;
+            display: flex;
+            width: 720px;
+            height: 420px;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            font-family: 'Noto Sans KR', sans-serif;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
         }
 
-        h2 {
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .login-left {
+            width: 45%;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 60px 40px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-left h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
+            font-size: 32px;
             color: #1e1e1e;
-            margin-bottom: 32px;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
             margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+        }
+
+        .login-left p {
             font-size: 15px;
-            background-color: #fdfdfd;
-            transition: border-color 0.3s;
+            line-height: 1.6;
+            color: #444;
         }
 
-        input:focus {
-            border-color: #333;
-            outline: none;
+        .login-right {
+            width: 55%;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        button[type="submit"] {
-            background-color: #333;
-            color: white;
-            font-size: 16px;
-            padding: 14px;
-            border: none;
+        .login-right form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
         }
 
-        button[type="submit"]:hover {
-            background-color: #111;
+        .login-right input {
+            width: 100%;
+            max-width: 350px; /* 최대 너비 설정 */
+            padding: 14px;
+            margin-bottom: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #f9f9f9;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .login-right input:focus {
+            outline: none;
+            border-color: #333;
+            background-color: #fff;
+        }
+
+        .login-right button[type="submit"] {
+            width: 100%;
+            max-width: 350px; /* 최대 너비 설정 */
+            padding: 14px;
+            background: #222;
+            color: #fff;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-right button:hover {
+            background: #000;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .social-login img {
+            height: 38px;
+            border-radius: 6px;
+            transition: transform 0.2s ease, box-shadow 0.3s;
+        }
+
+        .social-login img:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .signup-guide {
+            margin-top: 22px;
+            font-size: 14px;
+        }
+
+        .signup-guide a {
+            color: #000;
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .signup-guide a:hover {
+            color: #007bff;
         }
 
         .error-msg {
             font-size: 13px;
             color: red;
-            margin-top: -10px;
-            margin-bottom: 10px;
+            margin: -10px 0 10px;
             display: block;
-        }
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .social-login img {
-            height: 40px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .social-login img:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .signup-guide {
-            margin-top: 24px;
-            font-size: 14px;
-            color: #555;
-        }
-
-        .signup-guide a {
-            color: #000;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .signup-guide a:hover {
-            color: #007bff;
         }
     </style>
 </head>
 <body>
 
 <div class="login-container">
-    <h2> Tastely 회원가입</h2>
-    <form th:action="@{/auth/login}" method="post">
-        <input type="text" name="user-id" placeholder="이메일 or 닉네임" required />
-        <span th:text="${error}" class="error-msg"></span>
-        <input type="password" name="password" placeholder="비밀번호" required />
-        <button type="submit">로그인</button>
-    </form>
-
-    <div class="social-login">
-        <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/kakao_login.png}" alt="카카오 로그인" />
-        </a>
-        <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
-            <img th:src="@{/icons/naver_login.png}" alt="네이버 로그인" />
-        </a>
+    <div class="login-left">
+        <h2>Tastely</h2>
+        <p>당신의 미식 여행을 시작하세요<br>로그인하고 레시피를 둘러보세요!</p>
     </div>
+    <div class="login-right">
+        <form th:action="@{/auth/login}" method="post">
+            <input type="text" name="user-id" placeholder="이메일 or 닉네임" required />
+            <span th:text="${error}" class="error-msg"></span>
+            <input type="password" name="password" placeholder="비밀번호" required />
+            <button type="submit">로그인</button>
+        </form>
 
-    <div class="signup-guide">
-        아직 계정이 없으신가요? <a href="/auth/signup">회원가입</a>
+        <div class="social-login">
+            <a th:href="@{https://kauth.kakao.com/oauth/authorize(client_id=${kakaoClientId}, redirect_uri=${kakaoRedirectUri}, response_type='code')}">
+                <img th:src="@{/icons/kakao_login.png}" alt="카카오 로그인" />
+            </a>
+            <a th:href="@{https://nid.naver.com/oauth2.0/authorize(client_id=${naverClientId}, redirect_uri=${naverRedirectUri}, response_type='code')}">
+                <img th:src="@{/icons/naver_login.png}" alt="네이버 로그인" />
+            </a>
+        </div>
+
+        <div class="signup-guide">
+            아직 계정이 없으신가요? <a href="/auth/signup">회원가입</a>
+        </div>
     </div>
 </div>
 
