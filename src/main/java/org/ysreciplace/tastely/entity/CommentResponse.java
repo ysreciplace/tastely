@@ -15,5 +15,5 @@ public class CommentResponse {
     private Long id;
     private String content;
     private String nickname;
-    private LocalDateTime createAt;// 유저 닉네임
+    private LocalDateTime createdAt;// 유저 닉네임
 }

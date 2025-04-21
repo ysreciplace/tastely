@@ -10,10 +10,7 @@ import org.ysreciplace.tastely.entity.Comment;
 import org.ysreciplace.tastely.entity.CommentResponse;
 import org.ysreciplace.tastely.entity.Recipe;
 import org.ysreciplace.tastely.entity.User;
-import org.ysreciplace.tastely.repository.CommentRepository;
-import org.ysreciplace.tastely.repository.FavoriteRepository;
-import org.ysreciplace.tastely.repository.RankingRepository;
-import org.ysreciplace.tastely.repository.RecipeRepository;
+import org.ysreciplace.tastely.repository.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +20,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class RankingController {
     private final CommentRepository commentRepository;
+    private UserRepository userRepository;
     private RankingRepository rankingRepository;
     private RecipeRepository recipeRepository;
     private FavoriteRepository favoriteRepository;
@@ -39,7 +37,6 @@ public class RankingController {
         }else{
             System.out.println("asdfasdf");
         }
-
 
         // 음식 목록 데이터 (임시 데이터)
         List<Recipe> popularRecipes = Arrays.asList(
@@ -71,6 +68,7 @@ public class RankingController {
         model.addAttribute("steps" , rankingRepository.getStepsByRecipeId(id));
         boolean isFavorite = favoriteRepository.exists((long)user.getId(), id);
         model.addAttribute("isFavorite" , isFavorite);
+        model.addAttribute("recipeUser",userRepository.findById(recipeRepository.findById(id).getUserId()));
         model.addAttribute("user",user);
         //List<Comment> comments = commentRepository.findCommentByRecipeId(id);
         //model.addAttribute("comments",comments);

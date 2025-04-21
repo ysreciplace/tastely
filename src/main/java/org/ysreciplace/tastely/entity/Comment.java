@@ -15,8 +15,12 @@ public class Comment {
     private Long recipeId;
     private Long userId;
     private String content;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
 
     public void setCreatedAt(LocalDateTime now) {
+    }
+
+    public String getCreatedAt() {
+        return "";
     }
 }
