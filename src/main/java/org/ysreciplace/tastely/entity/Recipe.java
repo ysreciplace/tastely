@@ -20,4 +20,5 @@ public class Recipe {
     private String difficulty;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String videoUrl;
 }
