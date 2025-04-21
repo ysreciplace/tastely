@@ -234,7 +234,7 @@
         <div class="info-item"><span class="info-label">⏱ 요리 시간:</span> <span
                 th:text="${recipe.cookTime} + ' 분'"></span></div>
         <div class="info-item"><span class="info-label">📈 난이도:</span> <span th:text="${recipe.difficulty}"></span></div>
-        <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${user.nickname}"></span></div>
+        <div class="info-item"><span class="info-label">👤 작성자:</span> <span th:text="${recipeUser.nickname}"></span></div>
         <div class="info-item"><span class="info-label">🗓 작성일:</span> <span
                 th:text="${#temporals.format(recipe.createdAt, 'yyyy-MM-dd')}"></span></div>
     </div>
@@ -288,7 +288,9 @@
                   style="flex: 1; height: 60px; border-radius: 6px; padding: 10px; resize: none; font-size: 14px; border: 1px solid #ccc;"></textarea>
 
         <button type="submit"
-                style="height: 60px; background-color: #800020; color: white; border: none; padding: 0 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">등록</button>
+                style="height: 60px; background-color: #800020; color: white; border: none; padding: 0 20px; border-radius: 6px; cursor: pointer; font-size: 14px;">
+            등록
+        </button>
     </form>
 
     <!-- 댓글 리스트 영역 -->
@@ -300,6 +302,7 @@
                  style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative;">
                 <p style="margin: 0 0 5px 0;">
                     <strong th:text="${comment.nickname}" style="color: #333;"></strong>
+                    <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')}"></span>
                 </p>
                 <p th:text="${comment.content}" style="margin: 0 0 5px 0;"></p>
                 <button class="delete-comment-btn"
@@ -313,9 +316,13 @@
         <!-- 전체보기 버튼 추가 -->
         <div th:if="${comments.size() > 3}">
             <button id="showAllComments"
-                    style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px;">전체보기</button>
+                    style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px;">
+                전체보기
+            </button>
             <button id="hideComments"
-                    style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px; display: none;">숨기기</button>
+                    style="margin-top: 10px; background-color: #800020; color: white; border: none; padding: 8px 16px; border-radius: 4px; display: none;">
+                숨기기
+            </button>
         </div>
     </div>
 
@@ -370,6 +377,7 @@
                 })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         const newComment = document.createElement("div");
                         newComment.classList.add("comment-box");
                         newComment.setAttribute("id", `comment-${data.id}`);
@@ -379,6 +387,7 @@
                  style="border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative;">
                 <p style="margin: 0 0 5px 0;">
                     <strong style="color: #333;">${data.nickname}</strong>
+                    <span style="color: #333;">${data.createAt}</span>
                 </p>
                 <p style="margin: 0 0 5px 0;">${data.content}</p>
                 <button class="delete-comment-btn"
