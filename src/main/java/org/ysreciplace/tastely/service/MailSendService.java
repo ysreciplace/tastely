@@ -45,7 +45,7 @@ public class MailSendService {
 
             String html = "<h2>안녕하세요, Tastely입니다.</h2>";
 
-            html += "<p>안녕하세요<h2><a href='http://192.168.10.158:8080'>Tastely</a>에 가입하신 것을 진심으로 환영합니다.</p>";
+            html += "<p>안녕하세요<h2><a href='http://192.168.10.40:8080'>Tastely</a>에 가입하신 것을 진심으로 환영합니다.</p>";
             html += "<p>이제 다양한 레시피를 올려보세요.</p>";
             html += "<p><span style='color : gray'>팀 코드노바 올림</span</</p>";
             messageHelper.setText(html, true);
@@ -68,8 +68,8 @@ public class MailSendService {
             messageHelper.setTo(email);
             messageHelper.setSubject("이메일 인증합니다.");
 
-            String html = "<h2>반갑습니다, <a href='http://192.168.10.158:8080'>Tastely</a>입니다</h2>";
-            html += "<p><a href='http://192.168.10.158:8080/auth/email-verify/" + email + "/" + token + "'>인증하기</a></p>";
+            String html = "<h2>반갑습니다, <a href='http://192.168.10.40:8080'>Tastely</a>입니다</h2>";
+            html += "<p><a href='http://192.168.10.40:8080/auth/email-verify/" + email + "/" + token + "'>인증하기</a></p>";
             messageHelper.setText(html, true);
             mailSender.send(message);
 

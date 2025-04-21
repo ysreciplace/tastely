@@ -43,10 +43,10 @@ public class LoginController {
     public String loginHandle(Model model) {
 
         model.addAttribute("kakaoClientId", "1fc2e7802aaca68e3e5bdd3462557b09");
-        model.addAttribute("kakaoRedirectUri", "http://192.168.10.158:8080/auth/kakao/callback");
+        model.addAttribute("kakaoRedirectUri", "http://192.168.10.40:8080/auth/kakao/callback");
 
         model.addAttribute("naverClientId", "NlUQDGh2LlNagycoFLWV");
-        model.addAttribute("naverRedirectUri", "http://192.168.10.158:8080/auth/naver/callback");
+        model.addAttribute("naverRedirectUri", "http://192.168.10.40:8080/auth/naver/callback");
 
         return "auth/login";
     }
