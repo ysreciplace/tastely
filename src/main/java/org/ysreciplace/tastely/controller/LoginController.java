@@ -43,10 +43,10 @@ public class LoginController {
     public String loginHandle(Model model) {
 
         model.addAttribute("kakaoClientId", "1fc2e7802aaca68e3e5bdd3462557b09");
-        model.addAttribute("kakaoRedirectUri", "http://127.0.0.1:8080/auth/kakao/callback");
+        model.addAttribute("kakaoRedirectUri", "http://192.168.10.158:8080/auth/kakao/callback");
 
         model.addAttribute("naverClientId", "NlUQDGh2LlNagycoFLWV");
-        model.addAttribute("naverRedirectUri", "http://127.0.0.1:8080/auth/naver/callback");
+        model.addAttribute("naverRedirectUri", "http://192.168.10.158:8080/auth/naver/callback");
 
         return "auth/login";
     }
@@ -70,7 +70,7 @@ public class LoginController {
     }
 
     @PostMapping("/signup")
-    public String signupPostHandle(@ModelAttribute User user) {
+    public String signupPostHandle(@ModelAttribute User user, HttpSession session) {
         User found = userRepository.findByUsernameOrEmail(user.getEmail());
 
         if (found == null) {
@@ -78,6 +78,7 @@ public class LoginController {
             user.setVerified("F");
             userRepository.save(user);
             mailSendService.sendWelcomeMessage(user);
+            session.setAttribute("user", user);
         }
         return "redirect:/ranking";
     }

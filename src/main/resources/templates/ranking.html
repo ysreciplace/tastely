@@ -226,8 +226,8 @@
             <button class="dropdown-btn">👤 마이페이지 ▼</button>
             <div class="dropdown-content">
                <a th:href="@{/page}">내 정보</a>
-                <a href="/mypage/recipes">내 레시피</a>
-                <a href="/mypage/favorites">내 즐겨찾기</a>
+                <a th:href="@{/recipe/page}">레시피</a>
+                <a th:href="@{/page(tab='favorite')}">내 즐겨찾기</a>
                 <a th:href="@{/auth/logout}">로그아웃</a>
             </div>
         </div>

@@ -68,8 +68,8 @@ public class MailSendService {
             messageHelper.setTo(email);
             messageHelper.setSubject("이메일 인증합니다.");
 
-            String html = "<h2>반갑습니다, <a href='http://127.0.0.1:8080'>Tastely</a>입니다</h2>";
-            html += "<p><a href='http://127.0.0.1:8080/auth/email-verify/" + email + "/" + token + "'>인증하기</a></p>";
+            String html = "<h2>반갑습니다, <a href='http://192.168.10.158:8080'>Tastely</a>입니다</h2>";
+            html += "<p><a href='http://192.168.10.158:8080/auth/email-verify/" + email + "/" + token + "'>인증하기</a></p>";
             messageHelper.setText(html, true);
             mailSender.send(message);
 
